@@ -1,0 +1,26 @@
+
+version: '2'
+services:
+  kaiwa:
+    container_name: kaiwa
+    env_file: ./envs/local.env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/kaiwa
+    ports:
+      - "8000:8000"
+    links:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    image: postgres:9.6
+    env_file: ./envs/local.env
+    volumes:
+      - postgres:/var/lib/postgresql/data/
+
+volumes:
+  postgres:

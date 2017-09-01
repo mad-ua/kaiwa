@@ -1,0 +1,14 @@
+[run]
+omit =
+    ../*admin*
+    ../*migrations*
+    */models.py
+    */test/*
+    */tests/*
+    */*tests*.py
+    conftest.py
+    */__init__.py
+    manage.py
+    kaiwa/settings/*
+    kaiwa/urls.py
+    kaiwa/wsgi.py

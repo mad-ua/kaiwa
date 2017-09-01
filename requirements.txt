@@ -1,0 +1,8 @@
+Django
+raven
+psycopg2
+
+# Tests
+pytest
+pytest-cov
+pytest-django
