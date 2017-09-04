@@ -14,6 +14,12 @@ def chat_view(request, *args, **kwargs):
 def get_tree(request, *args, **kwargs):
     return JsonResponse(
         json.load(
-            open(os.path.join(settings.BASE_DIR, 'chat', 'static', 'tree_fixture.json'))
+            open(os.path.join(
+                settings.BASE_DIR,
+                '..',
+                'conversation',
+                'static',
+                'tree_fixture.json'
+            ))
         )
     )
