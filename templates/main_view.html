@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block head %}
+  <!-- Hide main content while page is loading if JavaScript is enabled -->
+  <script>
+    document.write('<style>main{display:none;}#page-preloader{display:block;}</style>');
+  </script>
+  <!-- End hide -->
+{% endblock %}
+
+{% block content %}
+  <!-- Preloader -->
+  <div id="page-preloader"><span></span><span></span><span></span></div>
+
+  <!-- Chat -->
+  <main>
+    <!-- Header -->
+    {% comment %}
+    <header class="course-header" {% if img_url %} style="background-image:url('{{ img_url }}');" {% else %} style="background-image:url('{% static "img/hero.jpg" %}');" {% endif %}>
+      <div class="overlay"></div>
+
+      <div class="container">
+        <div class="logo"></div>
+
+        <h1>{{ course.title }}</h1>
+
+        <p>
+          by {{ course.addedBy|display_full_username }}
+        </p>
+      </div>
+    </header>
+    {% endcomment %}
+
+    <!-- Chat messages container -->
+    <section class="chat-messages"></section>
+  </main>
+
+
+  <!-- Chat input bar -->
+  <section class="chat-input-bar">
+    <div class="inner">
+      <div class="sidebar-toggle"><span></span></div>
+
+      <div class="chat-progress">
+        <span></span>
+      </div>
+
+      <div class="chat-container">
+        <img src="{% static "img/avatar-student.jpg" %}" alt="Avatar" class="chat-avatar">
+
+        <div class="chat-input">
+          <div class="chat-input-text">
+            <form id="chat-input-text-form" action="">
+              <textarea rows="1" placeholder="Type your answer here…"></textarea>
+              <input type="submit" value="Send">
+            </form>
+          </div>
+
+          <div class="chat-input-options"></div>
+
+          <div class="chat-input-custom"></div>
+        </div>
+
+        <div class="chat-loading"><span></span><span></span><span></span></div>
+      </div>
+
+      <div class="fullscreen-toggle"><span></span></div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block js %}
+  <!-- Chat config -->
+  <script>
+    var CUI = CUI || {};
+    CUI.config = CUI.config || {};
+
+    CUI.config.chatID = 1;
+    CUI.config.treeUrl = '/tree/';
+    CUI.config.DEBUG
+//  CUI.config.historyUrl = '/static/tree_fixture.json';
+// CUI.config.progressUrl = '/chat/progress/';
+// CUI.config.resourcesUrl = '/chat/resources/';
+    CUI.config.defaultStudentAvatar = '{% static "img/avatar-student.jpg" %}';
+    CUI.config.defaultTeacherAvatar = '{% static "img/avatar-teacher.jpg" %}';
+
+    console.log("CHATID");
+    console.log(CUI.config.chatID);
+  </script>
+
+  <!-- Mathjax -->
+  <!--<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+
+  <!-- Chat js -->
+  <script src="{% static "bower_components/screenfull/src/screenfull.js" %}"></script>
+  <script src="{% static "bower_components/zoom.js/dist/zoom.min.js" %}"></script>
+  <script src="{% static "js/plugins/jquery.more-less.js" %}"></script>
+  <script src="{% static "js/plugins/jquery.expanding-textarea.js" %}"></script>
+  <script src="{% static "js/plugins/jquery.notify.js" %}"></script>
+  <script src="{% static "js/cui.js" %}"></script>
+  <script src="{% static "js/models/cui.chat-breakpoint-model.js" %}"></script>
+  <script src="{% static "js/models/cui.chat-media-model.js" %}"></script>
+  <script src="{% static "js/models/cui.chat-message-model.js" %}"></script>
+  <script src="{% static "js/models/cui.sidebar-breakpoint-model.js" %}"></script>
+  <script src="{% static "js/models/cui.input-option-model.js" %}"></script>
+  <script src="{% static "js/models/cui.sidebar-resource-model.js" %}"></script>
+  <script src="{% static "js/presenters/cui.chat-message-presenter.js" %}"></script>
+  <script src="{% static "js/presenters/cui.chat-media-presenter.js" %}"></script>
+  <script src="{% static "js/presenters/cui.chat-breakpoint-presenter.js" %}"></script>
+  <script src="{% static "js/presenters/cui.input-option-presenter.js" %}"></script>
+  <script src="{% static "js/presenters/cui.sidebar-breakpoint-presenter.js" %}"></script>
+  <script src="{% static "js/presenters/cui.sidebar-resource-presenter.js" %}"></script>
+  <script src="{% static "js/presenters/cui.chat-presenter.js" %}"></script>
+  <script src="{% static "js/helpers.js" %}"></script>
+  <script src="{% static "js/chat.js" %}"></script>
+{% endblock %}

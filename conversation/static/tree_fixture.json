@@ -1,0 +1,158 @@
+{
+  "tree": {
+    "nodes": {
+      "0": {
+        "input": {
+          "type": "options",
+          "url": "52",
+          "options": [{
+            "text": "Go forward! ==>",
+            "value": "52",
+            "bot": {
+              "addMessages": [
+                {
+                  "id": 5201,
+                  "type": "message",
+                  "name": "BOT 1",
+                  "userMessage": false,
+                  "avatar": null,
+                  "html": "Are you sure about your desigion???"
+                }
+              ]
+            }
+          }]
+        },
+        "addMessages": [
+          {
+            "id": 0,
+            "type": "message",
+            "name": "alex",
+            "userMessage": false,
+            "avatar": null,
+            "html": "<p>Hello!<br>You are talking with conversation bot, which will ask you a couple of questions and you should ansvering honestly. <br>What is your name?</p>\n"
+          }
+        ]
+      },
+      "52": {
+        "input": {
+          "type": "options",
+          "url": "59",
+          "options": [
+            {
+              "text": "Not yet",
+              "value": "52",
+              "bot": {
+                "addMessages": [
+                  {
+                    "id": 5201,
+                    "type": "message",
+                    "name": "BOT 1",
+                    "userMessage": false,
+                    "avatar": null,
+                    "html": "Are you sure about your desigion???"
+                  }
+                ]
+              }
+            },
+            {
+              "text": "Yeah!",
+              "value": "53"
+            }
+          ]
+        },
+        "addMessages": [
+          {
+            "id": 52,
+            "type": "message",
+            "name": "alex",
+            "userMessage": false,
+            "avatar": null,
+            "html": "<p>Are you ready?!</p>\n"
+          }
+        ]
+      },
+      "53": {
+        "input": {
+          "type": "options",
+          "url": "59",
+          "options": [
+            {
+              "text": "Oh really Not yet :(",
+              "value": "53"
+            },
+            {
+              "text": "Yeah! Come on!",
+              "value": "54"
+            },
+            {
+              "text": "Not now... :(",
+              "value": 100
+            }
+          ]
+        },
+        "addMessages": [
+          {
+            "id": 53,
+            "type": "message",
+            "name": "alex",
+            "userMessage": false,
+            "avatar": null,
+            "html": "<p>What do you feel?</p>\n"
+          }
+        ]
+      },
+      "54": {
+        "input": {
+          "type": "options",
+          "url": "59",
+          "options": [
+            {
+              "text": "Yahooo!",
+              "value": "54"
+            },
+            {
+              "text": "Wanna to the end!!",
+              "value": 100
+            }
+          ]
+        },
+        "addMessages": [
+          {
+            "id": 54,
+            "type": "message",
+            "name": "alex",
+            "userMessage": false,
+            "avatar": null,
+            "html": "<p>We are beginning!</p>\n"
+          }
+        ]
+      },
+      "100": {
+        "input": {
+          "type": "options",
+          "url": "100",
+          "options": [
+            {
+              "text": "Bye!",
+              "value": "1000"
+            },
+            {
+              "text": "Go to the begin",
+              "value": 52
+            }
+          ]
+        },
+        "addMessages": [
+          {
+            "id": 100,
+            "type": "message",
+            "name": "alex",
+            "userMessage": false,
+            "avatar": null,
+            "html": "<p>You just finished this course! What do you want to do next?</p>\n"
+          }
+        ]
+      }
+    }
+  }
+}
