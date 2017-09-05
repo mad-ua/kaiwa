@@ -12,6 +12,27 @@ class Task(models.Model):
     is_public = models.BooleanField(default=False)
     start_node = models.ForeignKey('Node')
 
+    def convert_to_document(self):
+        """
+        For the DEMO purposes temporary create MongoDB like document.
+        """
+        start_node = self.start_node
+        start_edges = start_node.edges.all()
+        document = {'tree': {'nodes': {}}, 'start_node_id': start_node.id}
+        nodes = document['tree']['nodes']
+        nodes_queue = [start_node]
+        passed_nodes = set()
+        while nodes_queue:
+            try:
+                node = nodes_queue.pop()
+                if node not in passed_nodes:
+                    nodes[node.id] = node.serialized
+                    nodes_queue.extend([i.output_node for i in node.edges.all()])
+                    passed_nodes.add(node)
+            except IndexError:
+                pass
+        return document
+
 
 class Node(models.Model):
     """
@@ -20,8 +41,31 @@ class Node(models.Model):
     text = models.TextField()
 
     @property
-    def final(self):
+    def is_final(self):
         return not self.edges.all().exists()
+
+    @property
+    def serialized(self):
+        """
+        Naive serializations.
+        """
+        # TODO add options (Edges), bots (Feedbacks)
+        return {
+            "input": {
+                "type": "options",
+                "options": []
+            },
+            "addMessages": [
+                {
+                    "id": self.id,
+                    "type": "message",
+                    "name": "alex",
+                    "userMessage": False,
+                    "avatar": None,
+                    "html": self.text
+                }
+            ]
+        }
 
 
 class Edge(models.Model):
@@ -64,3 +108,4 @@ class Advicer(models.Model):
 
 class Feedback(models.Model):
     text = models.TextField()
+    rethink = models.BooleanField(default=False)
