@@ -9,14 +9,15 @@
             "text": "Go forward! ==>",
             "value": "52",
             "bot": {
+              "getMessage": "random",
               "addMessages": [
                 {
                   "id": 5201,
                   "type": "message",
                   "name": "BOT 1",
                   "userMessage": false,
-                  "avatar": null,
-                  "html": "Are you sure about your desigion???"
+                  "avatar": "/static/img/bot.png",
+                  "html": "What a stupid answer???"
                 }
               ]
             }

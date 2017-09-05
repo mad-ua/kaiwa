@@ -14,7 +14,6 @@ var CUI = CUI || {};
  */
 CUI.ChatPresenter = function(chatID, historyUrl, progressUrl, resourcesUrl){
   // Check arguments
-  console.log(chatID);
   if(typeof chatID !== 'number') throw new Error('CUI.ChatPresenter(): Invalid chatID.');
 //  if(!historyUrl) throw new Error('CUI.ChatPresenter(): No historyUrl.');
 //  if(!progressUrl) throw new Error('CUI.ChatPresenter(): No progressUrl.');
@@ -287,13 +286,12 @@ CUI.ChatPresenter.prototype._getHistory = function(){
  */
 CUI.ChatPresenter.prototype._getMessages = function(url){
   // Get messages and input
-  console.log("CUI.ChatPresenter.prototype._getMessages ", url);
-  console.log(CUI.tree.nodes[url]);
+  if (CUI.config.DEBUG) {
+    console.log("CUI.ChatPresenter.prototype._getMessages ", url);
+    console.log(CUI.tree.nodes[url]);
+  }
   data = CUI.tree.nodes[url];
   if (data === undefined) {return}
-  if (CUI.config.DEBUG == true) {
-    console.log("CUI.ChatPresenter.prototype._getMessages DATA ", data);
-  }
 
 //  $.ajax({
 //    url: url,
@@ -337,23 +335,60 @@ CUI.ChatPresenter.prototype._postInput = function(input){
   input.chat_id = this._chatID;
 
   var msg_txt = '';
+  var selected_option_model = undefined;
   if(input.option) {
     for (var i in this._inputOptions) {
       if (this._inputOptions[i]._model.value == input.option) {
-        msg_txt = this._inputOptions[i]._model.text
+        selected_option_model = this._inputOptions[i]._model
+        msg_txt = selected_option_model.text
+        if (selected_option_model.bot) {
+          console.log(selected_option_model.bot);
+        }
         break;
       }
     }
   }
 
   // Show loading
-  this._showLoading();
   var message_model = new CUI.ChatMessageModel({
     html: msg_txt || input.text,
     id: Math.round(Math.random() * 100 * 100),
     userMessage: true
   })
   this._addMessage(message_model);
+  // show message in the chat
+  // var me = this;
+  this._showLoading();
+
+  function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+  var interval_min = 1000;
+  var interval_max = 3000;
+  var bot_interval_min = interval_min,
+      bot_interval_max = bot_interval_max;
+  if (selected_option_model.bot) {
+    interval_max += 1000;
+    interval_min += 1000;
+
+    var bot = selected_option_model.bot;
+
+    window.setTimeout($.proxy(function(){
+      if (bot.getMessage == 'random') {
+        // TODO: Implement random choice of bot message
+        console.log("Random choice message");
+      } else if (bot.getMessage == 'all' || !bot.getMessage) {
+        this._addMessage(bot[0], true);
+      }
+    }, this), bot_interval_min, bot_interval_max)
+  }
+
+  window.setTimeout(
+    $.proxy(function(){
+      this._getMessages(this._inputUrl);
+    }, this), getRandomInt(interval_min, interval_max)
+  )
+
 
   if (CUI.config.DEBUG){
     console.log("CUI.ChatPresenter.prototype._postInput ", this._inputUrl);
@@ -365,7 +400,7 @@ CUI.ChatPresenter.prototype._postInput = function(input){
     }
     this._inputUrl = input.option
   }
-  this._getMessages(this._inputUrl);
+
 
   }
 
