@@ -9,10 +9,9 @@
             "text": "Go forward! ==>",
             "value": "52",
             "bot": {
-              "getMessage": "random",
               "addMessages": [
                 {
-                  "id": 5201,
+                  "id": 1,
                   "type": "message",
                   "name": "BOT 1",
                   "userMessage": false,
@@ -40,17 +39,31 @@
           "url": "59",
           "options": [
             {
-              "text": "Not yet",
+              "text": "Not yet, go to next node",
               "value": "52",
               "bot": {
+                "reanswering": true,
+                "input": {
+                  "type": "options",
+                  "url": "59",
+                  "options": [
+                    {
+                      "text": "Yes",
+                      "value": "52"
+                    },
+                    {
+                      "text": "No",
+                      "value": "53"
+                    }]
+                  },
                 "addMessages": [
                   {
                     "id": 5201,
                     "type": "message",
                     "name": "BOT 1",
                     "userMessage": false,
-                    "avatar": null,
-                    "html": "Are you sure about your desigion???"
+                    "avatar": "/static/img/bot.png",
+                    "html": "Do you want to re-answer for a last question??"
                   }
                 ]
               }

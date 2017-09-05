@@ -32,13 +32,8 @@ CUI.InputOptionModel = function(data){
    */
   this.text = data.text;
 
-  if (data.bot && data.bot.addMessages) {
-    this.bot = [];
-    // console.log("InputOptionModel ", data.bot.addMessages);
-    for (var i in data.bot.addMessages) {
-      this.bot.push(new CUI.ChatMessageModel(data.bot.addMessages[i]));
-
-    }
+  if (data.bot) {
+    this.bot = new CUI.BotModel(data.bot);
   }
 
   return this;

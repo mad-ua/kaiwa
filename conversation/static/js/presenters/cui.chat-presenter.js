@@ -366,29 +366,40 @@ CUI.ChatPresenter.prototype._postInput = function(input){
   var interval_min = 1000;
   var interval_max = 3000;
   var bot_interval_min = interval_min,
-      bot_interval_max = bot_interval_max;
+      bot_interval_max = interval_max;
   if (selected_option_model.bot) {
     interval_max += 1000;
     interval_min += 1000;
 
     var bot = selected_option_model.bot;
 
+    console.log("BOT = ", bot);
+
+    console.log("bot_interval_min = ", bot_interval_min);
+    console.log("bot_interval_max = ", bot_interval_max);
+
     window.setTimeout($.proxy(function(){
       if (bot.getMessage == 'random') {
         // TODO: Implement random choice of bot message
         console.log("Random choice message");
       } else if (bot.getMessage == 'all' || !bot.getMessage) {
-        this._addMessage(bot[0], true);
+        this._addMessage(bot.message, true);
+        if (bot.reanswering) {
+          console.log("BOT ", bot);
+          this._setInput(bot.input);
+          this._hideLoading();
+        }
       }
     }, this), bot_interval_min, bot_interval_max)
   }
 
-  window.setTimeout(
-    $.proxy(function(){
-      this._getMessages(this._inputUrl);
-    }, this), getRandomInt(interval_min, interval_max)
-  )
-
+  if (!bot || !bot.reanswering) {
+    window.setTimeout(
+      $.proxy(function(){
+        this._getMessages(this._inputUrl);
+      }, this), getRandomInt(interval_min, interval_max)
+    )
+  }
 
   if (CUI.config.DEBUG){
     console.log("CUI.ChatPresenter.prototype._postInput ", this._inputUrl);
