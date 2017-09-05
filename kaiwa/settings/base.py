@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # Local apps
     'identity',
     'conversation',
+    'lti_provider',
 ]
 
 MIDDLEWARE = [
@@ -133,6 +134,14 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'identity.User'
 
+# Platform for Privacy Preferences header
+P3P_HEADER = 'CP="Open EdX does not have a P3P policy."'
+
+# LTI Parameters
+X_FRAME_OPTIONS = "GOFORIT"
+
+# SSL proxy fix
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 try:
     from .local import *

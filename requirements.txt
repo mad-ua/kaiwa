@@ -1,8 +1,12 @@
 Django
 raven
 psycopg2
+oauthlib
 
 # Tests
 pytest
 pytest-cov
 pytest-django
+
+# Dev
+ipdb
