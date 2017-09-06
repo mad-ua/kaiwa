@@ -83,7 +83,7 @@
                     "type": "message",
                     "name": "BOT 1",
                     "userMessage": false,
-                    "avatar": null,
+                    "avatar": "/static/img/adviser.jpg",
                     "html": "Incorrect. There is a hint. If he does not want a drink he says 'No'. What does he say if he wants a drink?"
                   }
                 ]
