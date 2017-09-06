@@ -385,7 +385,7 @@ CUI.ChatPresenter.prototype._postInput = function(input){
       } else if (bot.getMessage == 'all' || !bot.getMessage) {
         this._addMessage(bot.message, true);
         if (bot.reanswering) {
-          console.log("BOT ", bot);
+          // console.log("BOT ", bot);
           this._setInput(bot.input);
           this._hideLoading();
         }

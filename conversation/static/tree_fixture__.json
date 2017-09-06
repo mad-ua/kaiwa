@@ -4,36 +4,19 @@
       "0": {
         "input": {
           "type": "options",
-          "url": "1",
+          "url": "52",
           "options": [{
-            "text": "Yes",
-            "value": "1"
-          }, {
-            "text": "No",
-            "value": "1000",
+            "text": "Go forward! ==>",
+            "value": "52",
             "bot": {
-              "reanswering": true,
-              "input": {
-                "type": "options",
-                "url": "url",
-                "options": [
-                  {
-                    "text": "Yes",
-                    "value": "1"
-                  },
-                  {
-                    "text": "No",
-                    "value": "1000"
-                  }
-              ]},
               "addMessages": [
                 {
-                  "id": 101,
+                  "id": 1,
                   "type": "message",
-                  "name": "Adviser 1",
+                  "name": "BOT 1",
                   "userMessage": false,
-                  "avatar": "/static/img/adviser.jpg",
-                  "html": "But this is very funny! I heard this one before. I reccomend to say 'YES'."
+                  "avatar": "/static/img/bot.png",
+                  "html": "What a stupid answer???"
                 }
               ]
             }
@@ -46,34 +29,30 @@
             "name": "alex",
             "userMessage": false,
             "avatar": null,
-            "html": "Hi! Wanna hear a pazzle about three logicians?"
+            "html": "<p>Hello!<br>You are talking with conversation bot, which will ask you a couple of questions and you should ansvering honestly. <br>What is your name?</p>\n"
           }
         ]
       },
-      "1": {
+      "52": {
         "input": {
           "type": "options",
           "url": "59",
           "options": [
             {
-              "text": "Yes",
-              "value": "100"
-            },
-            {
-              "text": "I don't know",
+              "text": "Not yet, go to next node",
               "value": "52",
               "bot": {
-                "reanswering": true ,
+                "reanswering": true,
                 "input": {
                   "type": "options",
                   "url": "59",
                   "options": [
                     {
                       "text": "Yes",
-                      "value": "100"
+                      "value": "52"
                     },
                     {
-                      "text": "I don't know",
+                      "text": "No",
                       "value": "53"
                     }]
                   },
@@ -83,40 +62,45 @@
                     "type": "message",
                     "name": "BOT 1",
                     "userMessage": false,
-                    "avatar": null,
-                    "html": "Incorrect. There is a hint. If he does not want a drink he says 'No'. What does he say if he wants a drink?"
+                    "avatar": "/static/img/bot.png",
+                    "html": "Do you want to re-answer for a last question??"
                   }
                 ]
               }
             },
             {
-              "text": "No",
-              "value": "1000"
+              "text": "Yeah!",
+              "value": "53"
             }
           ]
         },
         "addMessages": [
           {
-            "id": 1,
+            "id": 52,
             "type": "message",
-            "name": "bot",
+            "name": "alex",
             "userMessage": false,
             "avatar": null,
-            "html": "<p>Three logicians walk into a bar. The bartender says: 'Does everybody want a drink? </p> <p>The first logician says, 'I don't know.' <p>The second logician says, 'I don't know.'</p> <p>What does the third logician say is he wants a drink?</p>"
+            "html": "<p>Are you ready?!</p>\n"
           }
         ]
       },
-
-
-
       "53": {
         "input": {
           "type": "options",
           "url": "59",
           "options": [
             {
-              "text": "GO to begin",
-              "value": "0"
+              "text": "Oh really Not yet :(",
+              "value": "53"
+            },
+            {
+              "text": "Yeah! Come on!",
+              "value": "54"
+            },
+            {
+              "text": "Not now... :(",
+              "value": 100
             }
           ]
         },
@@ -127,20 +111,22 @@
             "name": "alex",
             "userMessage": false,
             "avatar": null,
-            "html": "Incorrect. There is an explanation. The first says \"I don't know\" because he wants a drink, but doesn't know if everybody wants one. If the first didn't want a drink, he would have answered \"No\". Same for the second, he wants a drink but doesn't know if the third wants one. So, the third answers \"Yes\" because he wants a drink"
+            "html": "<p>What do you feel?</p>\n"
           }
         ]
       },
-
-
-      "1000": {
+      "54": {
         "input": {
           "type": "options",
           "url": "59",
           "options": [
             {
-              "text": "Go to begin",
-              "value": "0"
+              "text": "Yahooo!",
+              "value": "54"
+            },
+            {
+              "text": "Wanna to the end!!",
+              "value": 100
             }
           ]
         },
@@ -148,21 +134,22 @@
           {
             "id": 54,
             "type": "message",
-            "name": "bot",
+            "name": "alex",
             "userMessage": false,
             "avatar": null,
-            "html": "<img src=\"http://i0.kym-cdn.com/entries/icons/facebook/000/003/617/OkayGuy.jpg\""
+            "html": "<p>We are beginning!</p>\n"
           }
         ]
       },
-
-
-
       "100": {
         "input": {
           "type": "options",
           "url": "100",
           "options": [
+            {
+              "text": "Bye!",
+              "value": "1000"
+            },
             {
               "text": "Go to the begin",
               "value": 52
@@ -176,7 +163,7 @@
             "name": "alex",
             "userMessage": false,
             "avatar": null,
-            "html": "Rigth! He understood that his friends want a drink and thus, his answer implies that everyone including himself want a drink. Good Job!"
+            "html": "<p>You just finished this course! What do you want to do next?</p>\n"
           }
         ]
       }
