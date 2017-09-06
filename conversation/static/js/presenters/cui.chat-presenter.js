@@ -214,70 +214,8 @@ CUI.ChatPresenter = function(chatID, historyUrl, progressUrl, resourcesUrl){
 CUI.ChatPresenter.prototype._getHistory = function(){
   // Show spinner
   this._showLoading();
-  // First message always should have id = 0
-  this._getMessages("0");
-                        //  this._parseHistory(start)
-                        //  if(data.input) this._setInput(data.input);
-                        //    else throw new Error("CUI.ChatPresenter._getMessages(): No data.input.");
-                        //
-                        //    // Update chat with new messages
-                        //    if(data.addMessages) this._parseMessages(data, true);
-                        //    else throw new Error("CUI.ChatPresenter._getMessages(): No data.addMessages.");
-                        //
-                        //    // Hide spinner
-                        //    this._hideLoading();
-                        //  this._setInput(start.input);
-                        //  this._parseMessages(start);
-                        //  console.log(CUI.tree.nodes[0]);
-
-
-
-  // Get history json
-//  $.ajax({
-//    url: this._historyUrl,
-//    method: 'GET',
-//    dataType: 'json',
-//    data: {chat_id: this._chatID},
-//    cache: false,
-//    context: this
-//  }).done(this._parseHistory).fail(function(){ throw new Error("CUI.ChatPresenter._getHistory(): Failed to load history."); });
+  this._getMessages(CUI.tree.start_node);
 };
-
-/**
- * Loads a user's progress and sends the response to {@link CUI.ChatPresenter#_parseProgress}.
- * @protected
- */
-                //CUI.ChatPresenter.prototype._getProgress = function(){
-                //  // Get progress
-                //  $.ajax({
-                //    url: this._progressUrl,
-                //    method: 'GET',
-                //    dataType: 'json',
-                //    data: {chat_id: this._chatID},
-                //    cache: false,
-                //    context: this
-                //  }).done(this._parseProgress).fail(function(){
-                //    throw new Error('CUI.ChatPresenter._getProgress(): Could not load progress.');
-                //  });
-                //};
-
-/**
- * Loads resources of the unit and sends the response to {@link CUI.ChatPresenter#_parseProgress}.
- * @protected
- */
-//CUI.ChatPresenter.prototype._getResources = function(){
-//  // Get progress
-//  $.ajax({
-//    url: this._resourcesUrl,
-//    method: 'GET',
-//    dataType: 'json',
-//    data: {chat_id: this._chatID},
-//    cache: false,
-//    context: this
-//  }).done(this._parseResources).fail(function(){
-//    throw new Error('CUI.ChatPresenter._getResources(): Could not load resources.');
-//  });
-//};
 
 /**
  * Loads a user's next set of messages and input type.
@@ -292,20 +230,6 @@ CUI.ChatPresenter.prototype._getMessages = function(url){
   }
   data = CUI.tree.nodes[url];
   if (data === undefined) {return}
-
-//  $.ajax({
-//    url: url,
-//    method: 'GET',
-//    dataType: 'json',
-//    data: {chat_id: this._chatID},
-//    cache: false,
-//    context: this
-//  }).done(function(data){
-    // Update resources
-//    this._getResources();
-    // Update progress
-//    this._getProgress();
-    // Update the current input type in the chat
     if(data.input) this._setInput(data.input);
     else throw new Error("CUI.ChatPresenter._getMessages(): No data.input.");
 
@@ -373,10 +297,11 @@ CUI.ChatPresenter.prototype._postInput = function(input){
 
     var bot = selected_option_model.bot;
 
-    console.log("BOT = ", bot);
-
-    console.log("bot_interval_min = ", bot_interval_min);
-    console.log("bot_interval_max = ", bot_interval_max);
+    if (CUI.config.DEBUG) {
+      console.log("BOT = ", bot);
+      console.log("bot_interval_min = ", bot_interval_min);
+      console.log("bot_interval_max = ", bot_interval_max);
+    }
 
     window.setTimeout($.proxy(function(){
       if (bot.getMessage == 'random') {
@@ -411,61 +336,7 @@ CUI.ChatPresenter.prototype._postInput = function(input){
     }
     this._inputUrl = input.option
   }
-
-
-  }
-
-  // Post input to server
-//  $.ajax({
-//    url: this._inputUrl,
-//    method: 'PUT',
-//    dataType: 'json',
-//    contentType: 'application/json',
-//    data: JSON.stringify(input),
-//    cache: false,
-//    context: this
-//  }).done(function(response){
-//    // Check that nextMessagesUrl is in response
-//    if(response && response.nextMessagesUrl && response.input && !response.input.doWait){
-//        // Load next set of messages
-//        this._getMessages(response.nextMessagesUrl);
-//        // set flag to true, because we need to show messages
-//        this._needShowMsg = true;
-//    }else if(response && response.input && response.input.doWait) {
-//      if(this._needShowMsg){
-//       /* parse response to understand should we do more requests or not.
-//        * this.setInput function will look into response.input.doWait parameter
-//        * and if doWait is true will call setTimeout function with needed parameters.
-//        */
-//        this._getMessages(response.nextMessagesUrl);
-//        // set to false cause we already shown messages.
-//        this._needShowMsg = false;
-//      }else{
-//        this._setInput(response.input);
-//      }
-//    }else if(response.error){
-//      // Enable input
-//      this._inputIsEnabled = true;
-//
-//      // Hide spinner
-//      this._hideLoading();
-//
-//      // Show message to try again
-//      this._showNotification(response.error);
-//    }else{
-//      throw new Error('CUI.ChatPresenter._postInput(): No response.nextMessagesUrl or response.error');
-//    }
-//  }).fail(function(){
-//    // Enable input
-//    this._inputIsEnabled = true;
-//
-//    // Hide spinner
-//    this._hideLoading();
-//
-//    // Show message to try again
-//    this._showNotification(CUI.text.errorTryAgain);
-//  });
-//};
+}
 
 /**
  * Passes text input onto to {@link ChatPresenter#_postInput}.
@@ -560,116 +431,8 @@ CUI.ChatPresenter.prototype._showChat = function(){
   TweenLite.to(window, this._getScrollSpeed(top), {scrollTo: {y: top, autoKill: false}, ease: Power2.easeInOut, onComplete: $.proxy(function(){
     // Get message history
     this._getHistory();
-
-    // Update progress
-//    this._getProgress();
-//    this._getResources();
   }, this)});
 };
-
-/**
-// * Parses progress data and updates the progress bar and the list of breakpoints in the sidebar.
-// * @protected
-// * @param {object} data               - An object containing the user's progress.
-// * @param {number} data.progress      - The user's progress 0 - 1.
-// * @param {Array} data.breakpoints    - An array of breakpoints to display in the sidebar.
-// */
-//CUI.ChatPresenter.prototype._parseProgress = function(data){
-//  var newWidth;
-//  var breakpoint;
-//  var timeline;
-//  var $progressBar;
-//
-//  // Check that data contains progress
-//  if(data && typeof data.progress === 'number'){
-//    // Calculate new progress bar width
-//    newWidth = this._$progress.width() * data.progress;
-//    newWidth = (newWidth > 10) ? newWidth : 10;
-//
-//    // Animate progress bar
-//    $progressBar = this._$progress.find('span');
-//    TweenMax.fromTo($progressBar, 0.5, {scale: 1}, {scale: 1.3, repeat: 1, yoyo:true, ease: Power1.easeInOut});
-//    TweenMax.to($progressBar, 1, {width: newWidth}, {width: newWidth, ease: Back.easeOut}, 0);
-//
-//    // Add breakpoints to the sidebar
-//    if(data.breakpoints instanceof Array && data.breakpoints.length > 0){
-//      // Remove existing breakpoints
-//      $.each(this._sidebarBreakpoints, $.proxy(function(i, b){
-//        b.destroy();
-//      }, this));
-//
-//      // Reset breakpoints Array
-//      this._sidebarBreakpoints = [];
-//      this.isDone = 0
-//      // Add new breakpoints
-//      $.each(data.breakpoints, $.proxy(function(i, b){
-//        // Create breakpoint from template
-//        breakpoint = new CUI.SidebarBreakpointPresenter(new CUI.SidebarBreakpointModel(b));
-//
-//        if (b.isDone) {
-//          this.isDone++;
-//        }
-//
-//        // Add reference to breakpoint
-//        this._sidebarBreakpoints.push(breakpoint);
-//
-//        // Add breakpoint in sidebar
-//        this._$sidebarBreakpointsContainer.append(breakpoint.$el);
-//      }, this));
-//      if (!data.is_live && this.isDone == this._sidebarBreakpoints.length){
-//        this._$sidebarToggle.trigger('resources');
-//      }
-//    }
-//  }else{
-//    throw new Error('CUI.ChatPresenter._parseProgress(): No data.progress');
-//  }
-//};
-
-///**
-// * Parses resources data and updates the list of breakpoints in the sidebar.
-// * @protected
-// * @param {object} data               - An object containing the user's progress.
-// * @param {number} data.progress      - The user's progress 0 - 1.
-// * @param {Array} data.breakpoints    - An array of breakpoints to display in the sidebar.
-// */
-//CUI.ChatPresenter.prototype._parseResources = function(data){
-//  var breakpoint;
-//
-//    if(data){
-//      // Add breakpoints to the sidebar
-//      if(data.breakpoints instanceof Array && data.breakpoints.length > 0){
-//        // Remove existing breakpoints
-//        $.each(this._sidebarResources, $.proxy(function(i, b){
-//          b.destroy();
-//        }, this));
-//
-//        // Show resources header.
-//        // If no resources - hide resources header. Needed for live chat.
-//        this._$sidebarResourcesHeaderContainer.show();
-//
-//        // Reset breakpoints Array
-//        this._sidebarResources = [];
-//
-//        // Add new breakpoints
-//        $.each(data.breakpoints, $.proxy(function(i, b){
-//          // Create breakpoint from template
-//          breakpoint = new CUI.SidebarResourcePresenter(new CUI.SidebarResourceModel(b));
-//
-//          // Add reference to breakpoint
-//          this._sidebarResources.push(breakpoint);
-//
-//          // Add breakpoint in sidebar
-//          this._$sidebarResourcesContainer.append(breakpoint.$el);
-//        }, this));
-//      } else {
-//        // If no resources - hide resources header. Needed for live chat.
-//        this._$sidebarResourcesHeaderContainer.hide();
-//      }
-//    }
-//  else{
-//    throw new Error('CUI.ChatPresenter._parseProgress(): No data.progress');
-//  }
-//};
 
 /**
  * Parses chat history data.
@@ -896,28 +659,6 @@ CUI.ChatPresenter.prototype._hideLoading = function(){
 };
 
 /**
- * Toggles the visibility of the sidebar.
- * @protected
- */
-CUI.ChatPresenter.prototype._toggleSidebar = function(){
-  var timeline = new TimelineMax();
-
-  // Hide sidebar if visible
-  if(this._isSidebarVisible){
-    timeline.to(this._$sidebar, 0.6, {left: -320, ease: Sine.easeInOut});
-    timeline.to($('main, .chat-input-bar'), 0.6, {paddingLeft: 0, ease: Sine.easeInOut}, 0);
-    timeline.to(this._$sidebar.find('header .inner, section'), 0.5, {opacity: 0, x: -40, ease: Sine.easeInOut, force3D: 'auto', clearProps: 'transform'}, 0);
-    this._isSidebarVisible = false;
-  // Show sidebar if not visible
-  }else{
-    timeline.to(this._$sidebar, 0.6, {left: 0, ease: Sine.easeInOut});
-    timeline.to($('main, .chat-input-bar'), 0.6, {paddingLeft: 320, ease: Sine.easeInOut}, 0);
-    timeline.fromTo(this._$sidebar.find('header .inner, section'), 0.5, {opacity: 0, x: -40}, {opacity: 1, x: 0, ease: Sine.easeInOut, force3D: 'auto', clearProps: 'transform'}, 0.3);
-    this._isSidebarVisible = true;
-  }
-};
-
-/**
  * Toggles fullscreen.
  * @protected
  */
@@ -964,18 +705,6 @@ CUI.ChatPresenter.prototype._scrollToMessage = function(id){
   }
 };
 
-CUI.ChatPresenter.prototype._scrollToResourceMessage = function(id, ul){
-  var $message;
-  var top;
-  // Check that message exists
-  if(this._messages[id]){
-    $message = this._messages[id].$el;
-    top = $message.offset().top - 60;
-    TweenLite.to(window, this._getScrollSpeed(top), {scrollTo: top, ease: Power2.easeInOut});
-  } else {
-      this._getMessages(this._resourcesUrl+ul+'/');
-  };
-};
 /**
  * Calculates the scroll animation time for window based on distance.
  * @protected
@@ -998,32 +727,6 @@ CUI.ChatPresenter.prototype._getScrollSpeed = function(scrollTo){
   return speed;
 };
 
-/* Inner function for runWaitTimer. This function will be called inside of setTimeout.
- */
-// CUI.ChatPresenter.prototype._waitTimerInnerFunc = function(input){
-//   this._inputIsEnabled = true;
-//   var me = this;
-//   return function() {
-//     me._postInput({
-//      chat_id: input.chat_id,
-//      url: input.url,
-//      type: 'options',
-//      options: [],
-//      selected: {}
-//     }); //input)
-//   };
-// }
-
-/**
- * This function handles WAIT_* nodes of fsm looking at input.doWait field.
- * If doWait field is true, it will be in cycle until doWait came to be false.
- *
-*/
-CUI.ChatPresenter.prototype._runWaitTimer = function(input) {
-  if(input.url) this._inputUrl = input.url;
-   else throw new Error('CUI.ChatPresenter._setInput(): No input.url.');
-   var timeout_id = window.setTimeout(this._waitTimerInnerFunc(input), 1000*2); // run after 2 seconds.
-};
 
 /**
  * Updates the input type visible in the chat.

@@ -46,7 +46,10 @@ $(function(){
         CUI.tree = result.tree;
       }
     })
-    console.log(CUI.config.chatID);
+    if (CUI.config.DEBUG){
+      console.log(CUI.config.chatID);
+    }
+
     // Create the chat
     var chat = new CUI.ChatPresenter(CUI.config.chatID, CUI.config.historyUrl, CUI.config.progressUrl, CUI.config.resourcesUrl);
     CUI.chat = chat;
