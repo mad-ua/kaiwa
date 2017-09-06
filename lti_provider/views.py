@@ -121,4 +121,4 @@ def render_courseware(request, task_id):
     Return an HttpResponse object that contains the template and necessary
     context to render the courseware.
     """
-    return chat_view(request, task_id)
+    return chat_view(request, task_id=task_id)
