@@ -10,9 +10,16 @@ from .models import (
 )
 
 
+class EdgeAdmin(admin.ModelAdmin):
+    filter_horizontal = ('feedbacks',)
+
+
+class AdvicerAdmin(admin.ModelAdmin):
+    filter_horizontal = ('feedbacks',)
+
 admin.site.register(Task)
 admin.site.register(Node)
-admin.site.register(Edge)
+admin.site.register(Edge, EdgeAdmin)
 admin.site.register(Response)
-admin.site.register(Advicer)
+admin.site.register(Advicer, AdvicerAdmin)
 admin.site.register(Feedback)

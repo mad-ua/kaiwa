@@ -41,6 +41,9 @@ class Task(models.Model):
         finally:
             return result
 
+    def __str__(self):
+        return '{}:{}'.format(self.name, self.task_id)
+
 
 class Node(models.Model):
     """
@@ -78,6 +81,10 @@ class Node(models.Model):
         return node
 
 
+    def __str__(self):
+        return self.text
+
+
 class Edge(models.Model):
     """
     Conversational Task Edge.
@@ -103,11 +110,18 @@ class Edge(models.Model):
         return edge
 
 
+    def __str__(self):
+        return '{}->{}'.format(self.source_node, self.output_node)
+
+
 class Response(models.Model):
     """
     Conversational Task Response.
     """
     text = models.TextField()
+
+    def __str__(self):
+        return self.text
 
 
 class Advicer(models.Model):
@@ -117,8 +131,8 @@ class Advicer(models.Model):
     GOOD = 'g'
     BAD = 'b'
     ADVICER_CATEGORIES = (
-        (GOOD, 'Freshman'),
-        (BAD, 'Sophomore'),
+        (GOOD, 'Good bot'),
+        (BAD, 'Bad bot'),
     )
 
     category = models.CharField(
@@ -127,6 +141,9 @@ class Advicer(models.Model):
         default=BAD
     )
     feedbacks = models.ManyToManyField('Feedback')
+
+    def __str__(self):
+        return self.category
 
 
 class Feedback(models.Model):
@@ -160,3 +177,6 @@ class Feedback(models.Model):
                 }]
             }
         return feedback
+
+    def __str__(self):
+        return self.text
