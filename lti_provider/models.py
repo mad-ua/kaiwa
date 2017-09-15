@@ -80,3 +80,46 @@ class LtiUser(models.Model):
 
     class Meta(object):
         unique_together = ('lti_consumer', 'lti_user_id')
+
+
+class OutcomeService(models.Model):
+    """
+    Model for a single outcome service associated with an LTI consumer. Note
+    that a given consumer may have more than one outcome service URL over its
+    lifetime, so we need to store the outcome service separately from the
+    LtiConsumer model.
+    An outcome service can be identified in two ways, depending on the
+    information provided by an LTI launch. The ideal way to identify the service
+    is by instance_guid, which should uniquely identify a consumer. However that
+    field is optional in the LTI launch, and so if it is missing we can fall
+    back on the consumer key (which should be created uniquely for each consumer
+    although we don't have a technical way to guarantee that).
+    Some LTI-specified fields use the prefix lis_; this refers to the IMS
+    Learning Information Services standard from which LTI inherits some
+    properties
+    """
+    lis_outcome_service_url = models.CharField(max_length=255, unique=True)
+    lti_consumer = models.ForeignKey(LtiConsumer)
+
+
+class GradedTask(models.Model):
+    """
+    Model representing a single launch of a graded assignment by an individual
+    user. There will be a row created here only if the LTI consumer may require
+    a result to be returned from the LTI launch (determined by the presence of
+    the lis_result_sourcedid parameter in the launch POST). There will be only
+    one row created for a given usage/consumer combination; repeated launches of
+    the same content by the same user from the same LTI consumer will not add
+    new rows to the table.
+    Some LTI-specified fields use the prefix lis_; this refers to the IMS
+    Learning Information Services standard from which LTI inherits some
+    properties
+    """
+    user = models.ForeignKey(User, db_index=True)
+    task_id = models.CharField(max_length=255, db_index=True)
+    outcome_service = models.ForeignKey(OutcomeService)
+    lis_result_sourcedid = models.CharField(max_length=255, db_index=True)
+    version_number = models.IntegerField(default=0)
+
+    class Meta(object):
+        unique_together = ('outcome_service', 'lis_result_sourcedid')

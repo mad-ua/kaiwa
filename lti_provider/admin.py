@@ -4,7 +4,7 @@ Admin interface for LTI Provider app.
 
 from django.contrib import admin
 
-from .models import LtiConsumer, LtiUser
+from .models import LtiConsumer, LtiUser, OutcomeService, GradedTask
 
 
 class LtiConsumerAdmin(admin.ModelAdmin):
@@ -14,3 +14,5 @@ class LtiConsumerAdmin(admin.ModelAdmin):
 
 admin.site.register(LtiConsumer, LtiConsumerAdmin)
 admin.site.register(LtiUser, admin.ModelAdmin)
+admin.site.register(OutcomeService)
+admin.site.register(GradedTask)

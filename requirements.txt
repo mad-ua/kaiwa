@@ -2,6 +2,9 @@ Django
 raven
 psycopg2
 oauthlib
+requests
+requests-oauthlib
+lxml
 
 # Tests
 pytest

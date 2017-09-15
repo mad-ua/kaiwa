@@ -9,6 +9,7 @@ from .signature_validator import SignatureValidator
 from .users import authenticate_lti_user
 from .utils import add_p3p_header, verify_task_id
 from .models import LtiConsumer
+from .outcomes import store_outcome_parameters
 
 
 logger = logging.getLogger(__name__)
@@ -74,6 +75,7 @@ def lti_launch(request, task_id):
     params['task_id'] = task_id
 
     authenticate_lti_user(request, params['user_id'], lti_consumer)
+    store_outcome_parameters(params, request.user, lti_consumer)
 
     return render_courseware(request, params['task_id'])
 
