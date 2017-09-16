@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'identity',
     'conversation',
     'lti_provider',
+    'cms',
 ]
 
 MIDDLEWARE = [
@@ -142,6 +143,11 @@ X_FRAME_OPTIONS = "GOFORIT"
 
 # SSL proxy fix
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# MongoDB settings
+MONGO_HOST = 'mongodb://mongo:27017'
+DB_DATA = 'data'
+
 
 try:
     from .local import *

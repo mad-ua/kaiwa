@@ -5,6 +5,7 @@ oauthlib
 requests
 requests-oauthlib
 lxml
+pymongo
 
 # Tests
 pytest

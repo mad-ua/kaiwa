@@ -24,4 +24,5 @@ urlpatterns = [
 
     # LTI
     url(r'^lti_provider/', include('lti_provider.urls')),
+    url(r'^cms/', include('cms.urls', namespace='cms')),
 ]

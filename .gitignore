@@ -8,3 +8,5 @@ db.sqlite3
 kaiwa/settings/local.py
 .coverage
 .idea/
+node_modules/
+package-lock.json

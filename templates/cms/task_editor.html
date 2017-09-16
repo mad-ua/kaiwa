@@ -1,0 +1,33 @@
+{% load static %}
+
+<!doctype html>
+<html ng-app="JSONedit">
+<head>
+    <script src="{% static "cms/bower_components/jquery/dist/jquery.min.js" %}"></script>
+    <script src="{% static "cms/bower_components/jquery-ui/jquery-ui.min.js" %}"></script>
+    <script src="{% static "cms/bower_components/angular/angular.min.js" %}"></script>
+    <script src="{% static "cms/bower_components/angular-ui-sortable/sortable.min.js" %}"></script>
+    <link href="{% static "cms/bower_components/bootstrap/dist/css/bootstrap.min.css" %}" rel="stylesheet" type="text/css" />
+
+    <script src="{% static "cms/js/directives.js" %}"></script>
+    <script src="{% static "cms/js/JSONedit.js" %}"></script>
+    <link href="{% static "cms/css/styles.css" %}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div id="mainView" ng-controller="MainViewCtrl" ng-init="jsonData={{ task_data }} ">
+        <h2>Conversational Tasks Edit</h2>
+
+        <div class="jsonView">
+            <json child="jsonData" default-collapsed="false" type="object"></json>
+        </div>
+
+        <hr>
+        <div>
+            <textarea id="jsonTextarea" ng-model="jsonString"></textarea>
+            <span class="red" ng-if="!wellFormed">JSON not well-formed!</span>
+        </div>
+  </div>
+
+</div>
+</body>
+</html>
