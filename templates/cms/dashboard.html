@@ -4,5 +4,5 @@ Tasks:
 <hr>
 {% for task in user_tasks %}
   <br>
-  Task: <a href="{% url 'cms:editor' task_name=task|get:'task_name' %}">{{ task|get:'task_name' }}</a>
+  Task: <a href="{% url 'cms:editor' task_id=task|get:'task_id' %}">{{ task|get:'task_name' }}</a>
 {% endfor %}

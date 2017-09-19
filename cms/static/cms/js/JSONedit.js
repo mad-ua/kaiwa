@@ -2,7 +2,7 @@
 
 var app = angular.module('exampleApp', ['JSONedit']);
 
-function MainViewCtrl($scope, $filter) {
+function MainViewCtrl($scope, $filter, $http) {
 
     // example JSON
     $scope.jsonData = {
@@ -199,9 +199,13 @@ function MainViewCtrl($scope, $filter) {
         try {
             $scope.jsonData = JSON.parse(json);
             $scope.wellFormed = true;
-            console.log(json);
+            update_data(json);
         } catch(e) {
             $scope.wellFormed = false;
         }
     }, true);
+    function update_data(json){
+      $http.post("http://localhost:8000/cms/task/update/", {task_data: json})
+        .then(function(response){ console.log(response); });
+    }
 }

@@ -24,22 +24,32 @@ class TasksStorage(MongoBase):
         Get all conversation tasks for particular user.
         """
         return self.conversations.find(
-            {"user_id": user_id, "task_name": {"$exists": True}},
+            {"user_id": user_id, "task_id": {"$exists": True}},
             projection={'_id': 0}
         )
 
-    def get_user_task(self, user_id, task_name):
+    def get_task(self, task_id):
+        """
+        Get particular conversation task.
+        """
+        return self.conversations.find_one(
+            {'task_id': task_id},
+            projection={'_id': 0}
+        )
+
+    def get_user_task(self, user_id, task_id):
         """
         Get particular conversation task for particular user.
         """
         return self.conversations.find_one(
-            {"user_id": user_id, 'task_name': task_name},
+            {"user_id": user_id, 'task_id': task_id},
             projection={'_id': 0}
         )
 
     def upsert_conversation(self, user_id, task_data):
+        print('!!!!!!!!!!!!!!!!!!!')
         user_task = self.conversations.update(
-            {'user_id': user_id, 'task_name': task_data.get('task_name')},
+            {'user_id': user_id, 'task_id': task_data.get('task_id')},
             task_data,
             upsert=True
         )

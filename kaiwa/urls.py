@@ -20,7 +20,8 @@ from conversation.views import chat_view, get_tree
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', chat_view, name='chat'),
-    url(r'^tree/?$', get_tree, name='get_tree'),
+    url(r'^task/(?P<task_id>.+)/*$', chat_view, name='chat_detail'),
+    url(r'^tree/(?P<task_id>.+)/*$', get_tree, name='get_tree'),
 
     # LTI
     url(r'^lti_provider/', include('lti_provider.urls')),

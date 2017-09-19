@@ -1,6 +1,9 @@
+import json
+
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 from conversation.mongo import TasksStorage
 
@@ -15,14 +18,15 @@ def dashboard(request):
 
 
 @login_required
-def editor(request, task_name):
-    task_data = storage.get_user_task(request.user.id, task_name)
+def editor(request, task_id):
+    task_data = storage.get_user_task(request.user.id, task_id)
     return render(request, 'cms/task_editor.html', {"task_data": task_data})
 
 
-@login_required
+@csrf_exempt
 def update_task(request):
-    task_data = request.POST.get('task_data')
+    data = json.loads(request.body)
+    task_data = json.loads(data.get('task_data'))
     if not task_data:
         return JsonResponse({'error': 'Improperly configured'}, status=400)
     else:

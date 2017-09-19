@@ -1,4 +1,4 @@
-{% load static %}
+{% load static misc %}
 
 <!doctype html>
 <html ng-app="JSONedit">
@@ -15,7 +15,7 @@
 </head>
 <body>
     <div id="mainView" ng-controller="MainViewCtrl" ng-init="jsonData={{ task_data }} ">
-        <h2>Conversational Tasks Edit</h2>
+        <h2>Conversational Tasks Edit <a href="{% url 'chat_detail' task_id=task_data|get:'task_id' %}" target="_blank">Open in Chat</a></h2>
 
         <div class="jsonView">
             <json child="jsonData" default-collapsed="false" type="object"></json>

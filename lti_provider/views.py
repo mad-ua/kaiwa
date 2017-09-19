@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, Http404
 
 from conversation.views import chat_view
+from cms.views import editor
 from .signature_validator import SignatureValidator
 from .users import authenticate_lti_user
 from .utils import add_p3p_header, verify_task_id
@@ -77,7 +78,7 @@ def lti_launch(request, task_id):
     authenticate_lti_user(request, params['user_id'], lti_consumer)
     store_outcome_parameters(params, request.user, lti_consumer)
 
-    return render_courseware(request, params['task_id'])
+    return render_courseware(request, params['task_id'], params['roles'])
 
 
 def get_required_parameters(dictionary, additional_params=None):
@@ -114,7 +115,7 @@ def get_optional_parameters(dictionary):
         if key in dictionary
     }
 
-def render_courseware(request, task_id):
+def render_courseware(request, task_id, roles):
     """
     Render the content requested for the LTI launch.
     TODO: This method depends on the current refactoring work on the
@@ -123,4 +124,7 @@ def render_courseware(request, task_id):
     Return an HttpResponse object that contains the template and necessary
     context to render the courseware.
     """
-    return chat_view(request, task_id=task_id)
+    if 'Instructor' in roles or 'Administrator' in roles:
+        return editor(request, task_id=task_id)
+    else:
+        return chat_view(request, task_id=task_id)
