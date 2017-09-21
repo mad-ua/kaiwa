@@ -40,12 +40,6 @@
   <!-- Chat input bar -->
   <section class="chat-input-bar">
     <div class="inner">
-      <div class="sidebar-toggle"><span></span></div>
-
-      <div class="chat-progress">
-        <span></span>
-      </div>
-
       <div class="chat-container">
         <img src="{% static "img/avatar-student.jpg" %}" alt="Avatar" class="chat-avatar">
 
@@ -78,6 +72,7 @@
 
     CUI.config.chatID = 1;
     CUI.config.treeUrl = "{{ tree_url }}";
+    CUI.config.grading_url = "{{ grading_url }}";
     CUI.config.DEBUG = true
 //  CUI.config.historyUrl = '/static/tree_fixture.json';
 // CUI.config.progressUrl = '/chat/progress/';

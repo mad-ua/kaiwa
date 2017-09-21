@@ -1,185 +1,637 @@
 {
-  "tree": {
-    "start_node": "199",
-    "nodes": {
-      "199": {
-        "input": {
-          "type": "options",
-          "url": "1",
-          "options": [{
-            "text": "Yes",
-            "value": "1"
-          }, {
-            "text": "No",
-            "value": "1000",
-            "bot": {
-              "reanswering": true,
-              "input": {
-                "type": "options",
-                "url": "url",
-                "options": [
-                  {
-                    "text": "Yes",
-                    "value": "1"
-                  },
-                  {
-                    "text": "No",
-                    "value": "1000"
-                  }
-              ]},
-              "addMessages": [
-                {
-                  "id": 101,
-                  "type": "message",
-                  "name": "Adviser 1",
-                  "userMessage": false,
-                  "avatar": "/static/img/adviser.jpg",
-                  "html": "But this is very funny! I heard this one before. I reccomend to say 'YES'."
-                }
-              ]
-            }
-          }]
-        },
-        "addMessages": [
-          {
-            "id": 0,
-            "type": "message",
-            "name": "alex",
-            "userMessage": false,
-            "avatar": null,
-            "html": "Hi! Wanna hear a pazzle about three logicians?"
-          }
-        ]
-      },
-      "1": {
-        "input": {
-          "type": "options",
-          "url": "59",
-          "options": [
-            {
-              "text": "Yes",
-              "value": "100"
-            },
-            {
-              "text": "I don't know",
-              "value": "52",
-              "bot": {
-                "reanswering": true ,
-                "input": {
-                  "type": "options",
-                  "url": "59",
-                  "options": [
-                    {
-                      "text": "Yes",
-                      "value": "100"
-                    },
-                    {
-                      "text": "I don't know",
-                      "value": "53"
-                    }]
-                  },
-                "addMessages": [
-                  {
-                    "id": 5201,
-                    "type": "message",
-                    "name": "BOT 1",
-                    "userMessage": false,
-                    "avatar": "/static/img/adviser.jpg",
-                    "html": "Incorrect. There is a hint. If he does not want a drink he says 'No'. What does he say if he wants a drink?"
-                  }
-                ]
+  "user_id": 999999999,
+  "task_id": "xxx",
+  "task_name": "Sample task",
+  "data": {
+    "tree": {
+      "start_node": "1",
+      "nodes": {
+        "1": {
+          "input": {
+            "type": "options",
+            "url": "1",
+            "options": [
+              {
+                "text": "Nice to meet you.",
+                "value": "2"
+              },
+              {
+                "text": "I'm happy to join the team.",
+                "value": "2"
+              },
+              {
+                "text": "Happy to learn about my new project.",
+                "value": "2"
               }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 1,
+              "type": "message",
+              "name": "alex",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "Hi, I’m Doctor Smith. So glad you are joining our research team."
+            }
+          ]
+        },
+        "2": {
+          "input": {
+            "type": "options",
+            "url": "2",
+            "options": [
+              {
+                "text": "Biased",
+                "value": "3"
+              },
+              {
+                "text": "Probably biased",
+                "value": "3"
+              },
+              {
+                "text": "Probably unbiased",
+                "value": "4"
+              },
+              {
+                "text": "Unbiased",
+                "value": "4"
+              },
+              {
+                "text": "Not sure",
+                "value": "4"
+              }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 2,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "<p>Our colleagues just conducted a study to determine if one baby aspirin per day reduces the incidence of colon cancer among men 50 and over.</p> <p>A random sample of 2000 physicians were asked to take one baby aspirin per day while another random sample of 2000 physicians did not take an aspirin. <p>After ten years, 1% of the physicians taking aspirin got colon cancer, and 5% of the physicians who did not take an aspirin got colon cancer. The authors of the study reported that that taking one baby aspirin per day reduces the incidence of colon cancer in men 50 and over by 80%. Is this research biased?</p> <p>Is this research biased?</p>"
+            }
+          ]
+        },
+        "3": {
+          "input": {
+            "type": "options",
+            "url": "3",
+            "options": [
+              {
+                "text": "Selection bias",
+                "value": "5"
+              },
+              {
+                "text": "Response bias",
+                "value": "6"
+              },
+              {
+                "text": "Publication bias",
+                "value": "6"
+              }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 3,
+              "type": "message",
+              "name": "alex",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "Which bias is exhibited?"
+            }
+          ]
+        },
+        "4": {
+          "input": {
+            "type": "options",
+            "url": "4",
+            "options": [
+              {
+                "text": "Selection bias",
+                "value": "7"
+              },
+              {
+                "text": "Response bias",
+                "value": "8"
+              },
+              {
+                "text": "Publication bias",
+                "value": "8"
+              },
+              {
+                "text": "No bias",
+                "value": "8"
+              }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 4,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "Are you sure there is no response, publication or selection bias in the study? "
             },
             {
-              "text": "No",
-              "value": "53"
+              "id": 4,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/advisor.jpg",
+              "html": "<p>Check out this video for a refresher</p><iframe width='100%' height='315' src='https://www.youtube.com/embed/oG027wOWJHA' frameborder='0' allowfullscreen></iframe>"
             }
           ]
         },
-        "addMessages": [
-          {
-            "id": 1,
-            "type": "message",
-            "name": "bot",
-            "userMessage": false,
-            "avatar": null,
-            "html": "<p>Three logicians walk into a bar. The bartender says: 'Does everybody want a drink? </p> <p>The first logician says, 'I don't know.' <p>The second logician says, 'I don't know.'</p> <p>What does the third logician say is he wants a drink?</p>"
-          }
-        ]
-      },
-
-
-
-      "53": {
-        "input": {
-          "type": "options",
-          "url": "59",
-          "options": [
+        "5": {
+          "input": {
+            "type": "options",
+            "url": "5",
+            "options": [
+              {
+                "text": "OK",
+                "value": "9"
+              }
+            ]
+          },
+          "addMessages": [
             {
-              "text": "GO to begin",
-              "value": "199"
-            }
-          ]
-        },
-        "addMessages": [
-          {
-            "id": 53,
-            "type": "message",
-            "name": "alex",
-            "userMessage": false,
-            "avatar": null,
-            "html": "Incorrect. There is an explanation. The first says \"I don't know\" because he wants a drink, but doesn't know if everybody wants one. If the first didn't want a drink, he would have answered \"No\". Same for the second, he wants a drink but doesn't know if the third wants one. So, the third answers \"Yes\" because he wants a drink"
-          }
-        ]
-      },
-
-
-      "1000": {
-        "input": {
-          "type": "options",
-          "url": "59",
-          "options": [
+              "id": 5,
+              "type": "message",
+              "name": "alex",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "<p>Cool.</p><p>The study exhibits selection bias because not every man over 50 had the same chance of being selected.</p> <p>If income influenced the incidence of colon cancer, the results of the study would certainly be called into question.</p>"
+            },
             {
-              "text": "Go to begin",
-              "value": "199"
+              "id": 5,
+              "type": "message",
+              "name": "alex",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "You are ready for the next challenge"
             }
           ]
-        },
-        "addMessages": [
-          {
-            "id": 54,
-            "type": "message",
-            "name": "bot",
-            "userMessage": false,
-            "avatar": null,
-            "html": "<img src=\"http://i0.kym-cdn.com/entries/icons/facebook/000/003/617/OkayGuy.jpg\""
-          }
-        ]
-      },
-
-
-
-      "100": {
-        "input": {
-          "type": "options",
-          "url": "100",
-          "options": [
+      	},
+        "6": {
+          "input": {
+            "type": "options",
+            "url": "6",
+            "options": [
+              {
+                "text": "OK",
+                "value": "9"
+              }
+            ]
+          },
+          "addMessages": [
             {
-              "text": "Go to the begin",
-              "value": "199"
+              "id": 6,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "<p>Actually, the study exhibits SELECTION bias because not every man over 50 had the same chance of being selected.</p> <p>If income influenced the incidence of colon cancer, the results of the study would certainly be called into question.</p>"
+            },
+            {
+              "id": 6,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/advisor.jpg",
+              "html": "A picture is worth a thousand words: <img src='https://image.slidesharecdn.com/std-author-training-slide-show-assessment-of-bias-nov-08-1232735688531792-1/95/assessment-of-bias-16-728.jpg?cb=1232714367'>"
             }
           ]
         },
-        "addMessages": [
-          {
-            "id": 100,
-            "type": "message",
-            "name": "alex",
-            "userMessage": false,
-            "avatar": null,
-            "html": "Rigth! He understood that his friends want a drink and thus, his answer implies that everyone including himself want a drink. Good Job!"
-          }
-        ]
+        "7": {
+          "input": {
+            "type": "options",
+            "url": "7",
+            "options": [
+              {
+                "text": "OK",
+                "value": "9"
+              }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 7,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "<p>Yes, you are back on track.</p> <p>The study exhibits selection bias because not every man over 50 had the same chance of being selected. </p><p>If income influenced the incidence of colon cancer, the results of the study would certainly be called into question.</p>"
+            },
+            {
+              "id": 7,
+              "type": "message",
+              "name": "alex",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "You are ready for the next challenge"
+            }
+          ]
+        },
+        "8": {
+          "input": {
+            "type": "options",
+            "url": "8",
+            "options": [
+              {
+                "text": "OK",
+                "value": "9"
+              }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 8,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "<p>Uh-oh. The study exhibits SELECTION bias because not every man over 50 had the same chance of being selected.</p> <p>If income influenced the incidence of colon cancer, the results of the study would certainly be called into question.</p>"
+            }
+          ]
+        },
+        "9": {
+          "input": {
+            "type": "options",
+            "url": "9",
+            "options": [
+             	{
+                "text": "The research was not biased",
+                "value": "11"
+              },
+              {
+                "text": "Response bias",
+                "value": "10"
+              },
+              {
+                "text": "Selection bias",
+                "value": "11"
+              },
+              {
+                "text": "Publication bias",
+                "value": "11"
+              }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 9,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "One hundred (100) randomly chosen high school students were asked if they had ever smoked marijuana. Sixty (60) students answered, and 25% said that they had smoked marijuana. The school officials reported that 25% of the high school students had smoked marijuana."
+            },
+          	{
+              "id": 9,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "Is this research biased? If so, which bias was exhibited?"
+            }
+          ]
+        },
+        "10": {
+          "input": {
+            "type": "options",
+            "url": "10",
+            "options": [
+              {
+                "text": "OK",
+                "value": "14"
+              }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 10,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "Yes, response bias because of the way the question was worded: Have you ever smoked marijuana?"
+            },
+                        {
+              "id": 10,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/advisor.jpg",
+              "html": "Also, students may not want to admit they broke the law (in many states!) and for this reason give an incorrect response."
+            },
+            {
+              "id": 10,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "Well done! Here is the last challenge on this topic."
+            }
+          ]
+        },
+        "11": {
+          "input": {
+            "type": "options",
+            "url": "11",
+            "options": [
+              {
+                "text": "The research was not biased",
+                "value": "13"
+              },
+              {
+                "text": "Response bias",
+                "value": "12"
+              },
+              {
+                "text": "Selection bias",
+                "value": "13"
+              },
+              {
+                "text": "Publication bias",
+                "value": "13"
+              }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 11,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "Are you sure? "
+            },
+            {
+              "id": 11,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/advisor.jpg",
+              "html": "What do you think about the wording of the question posed to the students?"
+            }
+          ]
+        },
+        "12": {
+          "input": {
+            "type": "options",
+            "url": "12",
+            "options": [
+              {
+                "text": "OK",
+                "value": "14"
+              }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 12,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "Yes, response bias because of the way the question was worded: Have you ever smoked marijuana?"
+            },
+            {
+              "id": 12,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "Here is the last challenge on this topic."
+            }
+          ]
+        },
+        "13": {
+          "input": {
+            "type": "options",
+            "url": "13",
+            "options": [
+              {
+                "text": "OK",
+                "value": "14"
+              }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 13,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "The response is biased because of the way the question was worded: Have you ever smoked marijuana?"
+            },
+            {
+              "id": 13,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "Here is the last challenge on this topic."
+            }
+          ]
+        },
+        "14": {
+          "input": {
+            "type": "options",
+            "url": "14",
+            "options": [
+              {
+                "text": "The research was not biased",
+                "value": "15"
+              },
+              {
+                "text": "Response bias",
+                "value": "17"
+              },
+              {
+                "text": "Selection bias",
+                "value": "17"
+              },
+              {
+                "text": "Publication bias",
+                "value": "17"
+              }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 14,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "A randomly selected group of walkathon participants were asked: “We are considering changing from Denny Park to Marymoor Park this year. Which would you prefer?” <p>Was this research biased? If so, which bias was exhibited?</p>"
+            }
+          ]
+        },
+        "15": {
+          "input": {
+            "type": "options",
+            "url": "15",
+            "options": [
+              {
+                "text": "OK",
+                "value": "21"
+              }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 15,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "Well done. Feedback on your performance is ready."
+            }
+          ]
+        },
+        "17": {
+          "input": {
+            "type": "options",
+            "url": "17",
+            "options": [
+              {
+                "text": "Yes",
+                "value": "19"
+              },
+              {
+                "text": "No",
+                "value": "18"
+              }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 17,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "I see. Are you sure that there is bias in this research?"
+            }
+          ]
+        },
+        "18": {
+          "input": {
+            "type": "options",
+            "url": "18",
+            "options": [
+              {
+                "text": "I want to see that",
+                "value": "21"
+              }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 18,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "Correct! Feedback on your performance is ready."
+            }
+          ]
+      	},
+        "19": {
+          "input": {
+            "type": "options",
+            "url": "17",
+            "options": [
+              {
+                "text": "OK",
+                "value": "20"
+              }
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 19,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "Actually, there is no bias in research. Next time try to identify possible sources of bias. "
+            },
+            {
+              "id": 19,
+              "type": "message",
+              "name": "bot",
+              "userMessage": false,
+              "avatar": "/static/img/advisor.jpg",
+              "html": "<p>Let's do a small refresher on statistical bias</p><iframe width='100%' height='315' src='https://www.youtube.com/embed/oG027wOWJHA' frameborder='0' allowfullscreen></iframe><p>Then you will be ready for feedback on your performance.</p>"
+            }
+          ]
+        },
+        "20": {
+          "final": true,
+          "grade": 0.5,
+          "input": {
+            "type": "options",
+            "url": "20",
+            "options": [
+              {
+                "text": "Yes, go ahead",
+                "value": "1"
+              },
+               {
+                "text": "Doing one more task on statistical bias will be great.",
+                "value": "1"
+              }
+
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 20,
+              "type": "message",
+              "name": "alex",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "You scored 0.5 out of 1 points. Would you want to do one more task to imrove your understanding of statistical bias before your Data Science Expert Panel?"
+            }
+          ]
+        },
+        "21": {
+          "final": true,
+          "grade": 0.75,
+          "input": {
+            "type": "options",
+            "url": "21",
+            "options": [
+              {
+                "text": "Doing one more task on statistical bias will be great.",
+                "value": "1"
+              },
+               {
+                "text": "I'm ready for Data Science Expert Panel",
+                "value": "1"
+              }
+
+            ]
+          },
+          "addMessages": [
+            {
+              "id": 21,
+              "type": "message",
+              "name": "alex",
+              "userMessage": false,
+              "avatar": "/static/img/bot.jpg",
+              "html": "Well done! You scored 0.75 out of 1 points. Are you ready to start your Data Science Expert Panel?"
+            }
+          ]
+        }
       }
     }
   }

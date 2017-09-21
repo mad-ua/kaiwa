@@ -225,7 +225,7 @@ p + p {
 
 .btn, .btn:visited, input[type=submit], button {
   font-family: "Avenir Next Rounded W01", sans-serif;
-  background: #43B02A;
+  background: #2F9FFA;
   border: 0;
   box-shadow: none;
   box-sizing: border-box;
@@ -244,7 +244,7 @@ p + p {
   transform: translateZ(0); }
 
 .btn:hover, .btn:active, .btn:focus, .btn:active:focus, input[type=submit]:hover, input[type=submit]:active, input[type=submit]:focus, input[type=submit]:active:focus, button:hover, button:active, button:focus, button:active:focus {
-  background: #43B02A;
+  background: #A3D7FF;
   color: #fff;
   transform: scale(1.035);
   text-decoration: none;
@@ -611,7 +611,7 @@ p + p {
 
 /* --- Chat messages container --- */
 .chat-messages {
-  background: #F0F4F7;
+  background: #F0F5F1;
   display: none;
   min-height: 100%;
   padding-top: 20px;
@@ -822,14 +822,14 @@ p + p {
 
 /* --- User message --- */
 .chat-message.chat-message-text.chat-message-user .chat-bubble {
-  background: #D6E9D8;
+  background: #A3D7FF;
   box-shadow: 0 0 1px 0 rgba(43, 51, 41, 0.6), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
   color: #313330; }
   .chat-message.chat-message-text.chat-message-user .chat-bubble:before {
-    background: #D6E9D8;
+    background: #A3D7FF;
     box-shadow: 0 0 1px 0 rgba(43, 51, 41, 0.6), 0 1px 3px 0 rgba(0, 0, 0, 0.12); }
   .chat-message.chat-message-text.chat-message-user .chat-bubble:after {
-    background: #D6E9D8; }
+    background: #A3D7FF; }
 
 /* --- Media message --- */
 .chat-message.chat-message-media .chat-bubble {

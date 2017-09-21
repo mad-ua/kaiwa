@@ -43,6 +43,7 @@ def lti_launch(request, task_id):
         - The launch data is correctly signed using a known client key/secret
           pair
     """
+    graded_task = None
     # Check the LTI parameters for all required params, otherwise return 400
     params = get_required_parameters(request.POST)
     if not params:
@@ -76,9 +77,10 @@ def lti_launch(request, task_id):
     params['task_id'] = task_id
 
     authenticate_lti_user(request, params['user_id'], lti_consumer)
-    store_outcome_parameters(params, request.user, lti_consumer)
+    if 'Student' in params['roles']:
+        graded_task = store_outcome_parameters(params, request.user, lti_consumer)
 
-    return render_courseware(request, params['task_id'], params['roles'])
+    return render_courseware(request, params['task_id'], params['roles'], graded_task)
 
 
 def get_required_parameters(dictionary, additional_params=None):
@@ -115,7 +117,7 @@ def get_optional_parameters(dictionary):
         if key in dictionary
     }
 
-def render_courseware(request, task_id, roles):
+def render_courseware(request, task_id, roles, graded_task):
     """
     Render the content requested for the LTI launch.
     TODO: This method depends on the current refactoring work on the
@@ -125,6 +127,6 @@ def render_courseware(request, task_id, roles):
     context to render the courseware.
     """
     if 'Instructor' in roles or 'Administrator' in roles:
-        return editor(request, task_id=task_id)
+        return editor(request, task_id=task_id, demo=True)
     else:
-        return chat_view(request, task_id=task_id)
+        return chat_view(request, task_id=task_id, graded_task=graded_task)

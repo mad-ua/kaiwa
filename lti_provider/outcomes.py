@@ -47,12 +47,13 @@ def store_outcome_parameters(request_params, user, lti_consumer):
             lti_consumer=lti_consumer
         )
 
-        GradedTask.objects.get_or_create(
+        graded_task, _ = GradedTask.objects.get_or_create(
             lis_result_sourcedid=result_id,
             task_id=task_id,
             user=user,
             outcome_service=outcomes
         )
+    return graded_task
 
 
 def generate_replace_result_xml(result_sourcedid, score):

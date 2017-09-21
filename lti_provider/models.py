@@ -122,4 +122,4 @@ class GradedTask(models.Model):
     version_number = models.IntegerField(default=0)
 
     class Meta(object):
-        unique_together = ('outcome_service', 'lis_result_sourcedid')
+        unique_together = ('outcome_service', 'lis_result_sourcedid', 'task_id')

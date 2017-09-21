@@ -239,8 +239,21 @@ CUI.ChatPresenter.prototype._getMessages = function(url){
 
     // Hide spinner
     this._hideLoading();
+    if (data.final) this._sendGrade(data.grade);
 //  }).fail(function(){ throw new Error("CUI.ChatPresenter._getMessages(): Failed to load messages."); });
 };
+
+
+CUI.ChatPresenter.prototype._sendGrade = function(grade){
+  $.ajax({
+    url: CUI.config.grading_url + "?score=" + grade,
+    async: false,
+    dataType: 'json',
+    success: function(result) {
+      console.log(result);
+    }
+  })
+}
 
 /**
  * Sends the user's input to the server.
@@ -262,7 +275,10 @@ CUI.ChatPresenter.prototype._postInput = function(input){
   var selected_option_model = undefined;
   if(input.option) {
     for (var i in this._inputOptions) {
-      if (this._inputOptions[i]._model.value == input.option) {
+      if (
+        this._inputOptions[i]._model.value == input.option &&
+        this._inputOptions[i]._model.text == input.text
+      ) {
         selected_option_model = this._inputOptions[i]._model
         msg_txt = selected_option_model.text
         if (selected_option_model.bot) {
@@ -360,9 +376,9 @@ CUI.ChatPresenter.prototype._postText = function(){
  * @protected
  * @param {string} optionValue     - The selected option's value.
  */
-CUI.ChatPresenter.prototype._postOption = function(optionValue){
+CUI.ChatPresenter.prototype._postOption = function(optionValue, text){
   // Create input object
-  var input = {option: optionValue};
+  var input = {option: optionValue, text: text};
   input.chat_id = this._chatID;
 
   // Send input to server
@@ -868,7 +884,7 @@ CUI.ChatPresenter.prototype._addEventListeners = function(){
     e.preventDefault();
 
     // Post input to server
-    this._postOption($(e.currentTarget).data('option-value'));
+    this._postOption($(e.currentTarget).data('option-value'), $(e.currentTarget).text());
   }, this));
 
   // Delegated events for sidebar breakpoint links
