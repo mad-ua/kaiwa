@@ -11,6 +11,7 @@ from lti_provider.models import GradedTask
 from lti_provider.outcomes import send_score_update
 from .models import Task
 from .mongo import TasksStorage
+from .converters import TaskConverter
 
 storage = TasksStorage()
 
@@ -38,13 +39,30 @@ def get_tree(request, *args, **kwargs):
             open(os.path.join(settings.BASE_DIR, '../conversation', 'static', 'tree_fixture.json'))
         )
 
-    if task_id and task_id != 'None':
-        task = get_object_or_404(Task, task_id=task_id)
-        task_data['user_id'] = request.user.id
-        task_data['task_id'] = task_id
-        task_data['task_name'] = task.name
+    # if task_id and task_id != 'None':
+    #     task = get_object_or_404(Task, task_id=task_id)
+    #     task_data['user_id'] = request.user.id
+    #     task_data['task_id'] = task_id
+    #     task_data['task_name'] = task.name
+    chat_data = TaskConverter(task_data['data']).convert()
+    return JsonResponse(chat_data)
 
-    return JsonResponse(task_data.get('data'))
+
+def get_tree_graph(request, *args, **kwargs):
+    task_id = kwargs.get('task_id')
+    task_data = storage.get_task(task_id)
+    if not task_data:
+        task_data = json.load(
+            open(os.path.join(settings.BASE_DIR, '../conversation', 'static', 'tree_fixture.json'))
+        )
+
+    # if task_id and task_id != 'None':
+    #     task = get_object_or_404(Task, task_id=task_id)
+    #     task_data['user_id'] = request.user.id
+    #     task_data['task_id'] = task_id
+    #     task_data['task_name'] = task.name
+    chat_data = TaskConverter(task_data['data']).convert_graph()
+    return JsonResponse(chat_data)
 
 
 def update_score(request, graded_task_id):

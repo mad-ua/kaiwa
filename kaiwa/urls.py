@@ -15,13 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from conversation.views import chat_view, get_tree, update_score
+from conversation.views import chat_view, get_tree, update_score, get_tree_graph
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', chat_view, name='chat'),
     url(r'^task/(?P<task_id>.+)/*$', chat_view, name='chat_detail'),
     url(r'^tree/(?P<task_id>.+)/*$', get_tree, name='get_tree'),
+    url(r'^tree_graph/(?P<task_id>.+)/*$', get_tree_graph, name='get_tree_graph'),
     url(r'^update_score/(?P<graded_task_id>.+)/*$', update_score, name='update_score'),
 
     # LTI

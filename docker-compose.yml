@@ -17,17 +17,19 @@ services:
       - mongo
 
   postgres:
-    container_name: postgres
+    container_name: kaiwa-postgres
     image: postgres:9.6
     env_file: ./envs/local.env
     volumes:
       - postgres:/var/lib/postgresql/data/
 
   mongo:
-    container_name: mongo
+    container_name: kaiwa-mongo
     image: mongo:latest
     volumes:
       - mongo:/data/db
+    ports:
+      - "27018:27017"
 
 volumes:
   postgres:

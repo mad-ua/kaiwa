@@ -20,13 +20,13 @@ class MongoBase:
 class TasksStorage(MongoBase):
     COLLECTION_NAME = 'conversation'
 
-    def get_user_tasks(self, user_id):
+    def get_tasks(self, user_id):
         """
         Get all conversation tasks for particular user.
         """
         return self.collection.find(
             {"user_id": user_id, "task_id": {"$exists": True}},
-            projection={'_id': 0}
+            projection={"data": 1, "task_id": 1, "_id": 0}
         )
 
     def get_task(self, task_id):
@@ -35,7 +35,7 @@ class TasksStorage(MongoBase):
         """
         return self.collection.find_one(
             {'task_id': task_id},
-            projection={'_id': 0}
+            projection={"_id": 0, "data": 1, "task_id": 1}
         )
 
     def get_user_task(self, user_id, task_id):
@@ -44,13 +44,13 @@ class TasksStorage(MongoBase):
         """
         return self.collection.find_one(
             {"user_id": user_id, 'task_id': task_id},
-            projection={'_id': 0}
+            projection={'_id': 0, 'user_id': 0, "task_id": 1}
         )
 
-    def upsert_conversation(self, user_id, task_data):
-        user_task = self.collection.update(
-            {'user_id': user_id, 'task_id': task_data.get('task_id')},
-            task_data,
+    def upsert_conversation(self, user_id, task_id, task_data):
+        user_task = self.collection.find_one_and_update(
+            {'user_id': user_id, 'task_id': task_id},
+            {'$set': {'data': task_data}},
             upsert=True
         )
 
