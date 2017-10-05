@@ -57,6 +57,7 @@ def create_lti_user(lti_user_id, lti_consumer):
                 kaiwa_user = User.objects.create_user(
                     username=kaiwa_user_id,
                     password=kaiwa_pass,
+                    organization=lti_consumer.organization
                 )
                 # A profile is required if PREVENT_CONCURRENT_LOGINS flag is set.
                 # TODO: We could populate user information from the LTI launch here,

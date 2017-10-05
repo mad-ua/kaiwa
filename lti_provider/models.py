@@ -6,6 +6,7 @@ import logging
 from django.db import models
 from django.contrib.auth import get_user_model
 
+from identity.models import Organization
 from .utils import token
 from .fields import CharNullField
 
@@ -23,6 +24,7 @@ class LtiConsumer(models.Model):
     consumer_key = models.CharField(max_length=32, unique=True, db_index=True, default=token)
     consumer_secret = models.CharField(max_length=32, unique=True, default=token)
     instance_guid = CharNullField(max_length=255, blank=True, null=True, unique=True)
+    organization = models.ForeignKey(Organization, null=True, blank=True)
 
     @staticmethod
     def get_or_supplement(instance_guid, consumer_key):

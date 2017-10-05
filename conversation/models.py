@@ -1,8 +1,13 @@
 import json
 
 from django.db import models
+from django.contrib.auth import get_user_model
 
+from identity.models import Organization
 from .utils import task_id_def
+
+
+User = get_user_model()
 
 
 class Task(models.Model):
@@ -13,6 +18,10 @@ class Task(models.Model):
     task_id = models.CharField(max_length=32, unique=True, default=task_id_def)
     is_public = models.BooleanField(default=False)
     start_node = models.ForeignKey('Node')
+    organization = models.ForeignKey(
+        Organization, null=True, blank=True, related_name='tasks'
+    )
+    user = models.ForeignKey(User, blank=True, null=True)
 
     @property
     def serialized(self):

@@ -10,6 +10,7 @@ from django.conf import settings
 
 from conversation.mongo import TasksStorage
 from conversation.models import Task
+from identity.models import Organization
 
 
 storage = TasksStorage()
@@ -17,8 +18,18 @@ storage = TasksStorage()
 
 @login_required
 def dashboard(request):
-    user_tasks = storage.get_tasks(request.user.id)
-    return render(request, 'cms/dashboard.html', {'user_tasks': user_tasks})
+    organization = request.user.organization
+    tasks_ids = (
+        organization.tasks.values_list('task_id', flat=True)
+        if organization else
+        Task.objects.filter(user=request.user).values_list(
+            'task_id', flat=True
+        )
+    )
+    user_tasks = storage.get_tasks([i for i in tasks_ids])
+    return render(
+        request, 'cms/dashboard.html', {'user_tasks': user_tasks}
+    )
 
 
 @login_required

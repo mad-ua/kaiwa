@@ -20,12 +20,13 @@ class MongoBase:
 class TasksStorage(MongoBase):
     COLLECTION_NAME = 'conversation'
 
-    def get_tasks(self, user_id):
+    def get_tasks(self, tasks_ids):
         """
         Get all conversation tasks for particular user.
         """
+        # TODO avoid task_id in result
         return self.collection.find(
-            {"user_id": user_id, "task_id": {"$exists": True}},
+            {"task_id": {"$in": tasks_ids}},
             projection={"data": 1, "task_id": 1, "_id": 0}
         )
 
