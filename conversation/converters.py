@@ -58,7 +58,9 @@ class TaskConverter:
         )
         for i in situation.get('Answers', ()):
             self.graph['linkDataArray'].append({
-                "from": id, "to": situation.get('Answers')[i].get('Target'), "text": situation.get('Answers')[i].get('Text')
+                "from": id,
+                "to": situation.get('Answers')[i].get('Target'),
+                "text": situation.get('Answers')[i].get('Text')
             })
 
     def convert_message(self, message):

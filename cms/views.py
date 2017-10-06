@@ -87,12 +87,13 @@ def create_task(request):
       "KC management": {
         "KC 1": {
           "Name": "",
-          "Weight": 0
+          "Weight": 1
         }
       },
       "Nodes management": {
         "1": {
-          "Weight": 0,
+          "KC": "",
+          "Weight": 1,
           "Messages": {
             "Text": "",
             "Text2": ""
