@@ -26,8 +26,7 @@ class TasksStorage(MongoBase):
         """
         # TODO avoid task_id in result
         return self.collection.find(
-            {"task_id": {"$in": tasks_ids}},
-            projection={"data": 1, "task_id": 1, "_id": 0}
+            {"task_id": {"$in": tasks_ids}}, projection={"_id": 0}
         )
 
     def get_task(self, task_id):
@@ -36,7 +35,7 @@ class TasksStorage(MongoBase):
         """
         return self.collection.find_one(
             {'task_id': task_id},
-            projection={"_id": 0, "data": 1, "task_id": 1}
+            projection={"_id": 0}
         )
 
     def get_user_task(self, user_id, task_id):
@@ -49,10 +48,8 @@ class TasksStorage(MongoBase):
         )
 
     def upsert_conversation(self,  task_id, task_data):
-        user_task = self.collection.find_one_and_update(
-            {'task_id': task_id},
-            {'$set': {'data': task_data}},
-            upsert=True
+        user_task = self.collection.update(
+            {'task_id': task_id}, task_data, upsert=True
         )
 
 

@@ -44,7 +44,7 @@ def get_tree(request, *args, **kwargs):
     #     task_data['user_id'] = request.user.id
     #     task_data['task_id'] = task_id
     #     task_data['task_name'] = task.name
-    chat_data = TaskConverter(task_data['data']).convert()
+    chat_data = TaskConverter(task_data).convert()
     return JsonResponse(chat_data)
 
 
@@ -61,7 +61,7 @@ def get_tree_graph(request, *args, **kwargs):
     #     task_data['user_id'] = request.user.id
     #     task_data['task_id'] = task_id
     #     task_data['task_name'] = task.name
-    chat_data = TaskConverter(task_data['data']).convert_graph()
+    chat_data = TaskConverter(task_data).convert_graph()
     return JsonResponse(chat_data)
 
 

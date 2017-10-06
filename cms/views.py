@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
+from django.shortcuts import redirect
+from django.urls import reverse
 
 from conversation.mongo import TasksStorage
 from conversation.models import Task
@@ -63,8 +65,60 @@ def editor(request, task_id, demo=False):
 def update_task(request):
     data = json.loads(request.body)
     task_data = json.loads(data.get('task_data'))
+    task_id = task_data['task_id']
     if not task_data:
         return JsonResponse({'error': 'Improperly configured'}, status=400)
     else:
-        storage.upsert_conversation(task_data['task_id'], task_data['data'])
+        storage.upsert_conversation(task_id, task_data)
         return JsonResponse({'status': 'ok'}, status=200)
+
+
+@csrf_exempt
+def create_task(request):
+    task = Task(
+        name='dummy',
+        organization=request.user.organization,
+        user=request.user,
+        start_node_id=1
+    )
+    task.save()
+    task_data = {
+      "CT Name": "",
+      "KC management": {
+        "KC 1": {
+          "Name": "",
+          "Weight": 0
+        }
+      },
+      "Nodes management": {
+        "1": {
+          "Weight": 0,
+          "Messages": {
+            "Text": "",
+            "Text2": ""
+          },
+          "Answers": {
+            "Option 1": {
+              "Text": "",
+              "Target": "",
+              "Advisers": {
+                "Adviser 1": {
+                  "Text": "",
+                  "Target": ""
+                }
+              },
+              "Score": 0
+            },
+            "Option 2": {
+              "Text": "",
+              "Target": "",
+              "Score": 0,
+              "Advisers": {}
+            }
+          }
+        }
+      }
+    }
+    task_data['task_id'] = task.task_id
+    storage.upsert_conversation(task.task_id, task_data)
+    return redirect(reverse('cms:editor', kwargs={'task_id': task.task_id}))

@@ -1,8 +1,13 @@
 {% load misc %}
 
-Tasks:
+<h1>Tasks for you organization</h1>
 <hr>
+<ul>
 {% for task in user_tasks %}
-  <br>
-  Task: <a href="{% url 'cms:editor' task_id=task|get:'task_id' %}">{{ task|get:'task_id' }}</a>
+  <li>
+  Task: <a href="{% url 'cms:editor' task_id=task|get:'task_id' %}">{% if task|get:'CT Name' %}{{ task|get:'CT Name' }}{% else %}{{ task|get:'task_id' }}{% endif %}</a>
+  </li>
 {% endfor %}
+</ul>
+<hr>
+<a href="{% url 'cms:create' %}">Create new CT</a>

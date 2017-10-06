@@ -9,16 +9,16 @@ class TaskConverter:
                     "nodeDataArray": [],
                     "linkDataArray": []
                 }
-        for i in self.data.get('situations'):
-            situation = self.data.get('situations')[i]
+        for i in self.data.get('Nodes management'):
+            situation = self.data.get('Nodes management')[i]
             self.convert_situation_graph(i, situation)
         return self.graph
 
     def convert(self):
         result = {'tree': {'nodes': {}}}
-        result['tree']['start_node'] = self.data.get('start_situation')
-        for i in self.data.get('situations'):
-            situation = self.data.get('situations')[i]
+        result['tree']['start_node'] = "1"
+        for i in self.data.get('Nodes management'):
+            situation = self.data.get('Nodes management')[i]
             result['tree']['nodes'][i] = self.convert_situation(situation)
         return result
 
@@ -34,15 +34,19 @@ class TaskConverter:
             },
             "addMessages": []
         }
-        for i in situation.get('messages', ()):
-            node['addMessages'].append(self.convert_message(i))
-        if not situation.get('outcomes'):
+        for i in situation.get('Messages', ()):
+            node['addMessages'].append(
+                self.convert_message(situation.get('Messages')[i])
+            )
+        if not situation.get('Answers'):
             node['input']['options'].append(
-                {'text': 'To start', 'value': self.data.get('start_situation')}
+                {'text': 'To start', 'value': "1"}
             )
         else:
-            for i in situation.get('outcomes'):
-                node['input']['options'].append(self.convert_outcome(i))
+            for i in situation.get('Answers'):
+                node['input']['options'].append(
+                    self.convert_outcome(situation.get('Answers')[i])
+                )
         return node
 
     def convert_situation_graph(self, id, situation):
@@ -50,11 +54,11 @@ class TaskConverter:
         Convert to Graph representation.
         """
         self.graph['nodeDataArray'].append(
-            {"id": id, "text": situation.get('messages')[0].get('text')}
+            {"id": id, "text": situation.get('Messages')['Text']}
         )
-        for i in situation.get('outcomes', ()):
+        for i in situation.get('Answers', ()):
             self.graph['linkDataArray'].append({
-                "from": id, "to": i.get('target'), "text": i.get('text')
+                "from": id, "to": situation.get('Answers')[i].get('Target'), "text": situation.get('Answers')[i].get('Text')
             })
 
     def convert_message(self, message):
@@ -64,19 +68,20 @@ class TaskConverter:
         return {
             "id": 0,
             "type": "message",
-            "name": message.get('name'),
+            "name": "Name",
             "userMessage": False,
             "avatar": "/avatar.jpg",
-            "html": message.get('text')
+            "html": message
         }
 
     def convert_outcome(self, outcome):
         """
         Convert Edge/Outcome.
         """
+        print(outcome)
         edge = {
-            "text": outcome.get('text'),
-            "value": outcome.get('target'),
+            "text": outcome.get('Text'),
+            "value": outcome.get('Target'),
         }
         return edge
 
