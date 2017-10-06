@@ -66,7 +66,5 @@ def update_task(request):
     if not task_data:
         return JsonResponse({'error': 'Improperly configured'}, status=400)
     else:
-        storage.upsert_conversation(
-            request.user.id, task_data['task_id'], task_data['data']
-        )
+        storage.upsert_conversation(task_data['task_id'], task_data['data'])
         return JsonResponse({'status': 'ok'}, status=200)

@@ -205,7 +205,7 @@ function MainViewCtrl($scope, $filter, $http) {
         }
     }, true);
     function update_data(json){
-      $http.post("http://localhost:8000/cms/task/update/", {task_data: json})
+      $http.post("/cms/task/update/", {task_data: json})
         .then(function(response){ console.log(response); });
     }
 }

@@ -48,9 +48,9 @@ class TasksStorage(MongoBase):
             projection={'_id': 0, 'user_id': 0, "task_id": 1}
         )
 
-    def upsert_conversation(self, user_id, task_id, task_data):
+    def upsert_conversation(self,  task_id, task_data):
         user_task = self.collection.find_one_and_update(
-            {'user_id': user_id, 'task_id': task_id},
+            {'task_id': task_id},
             {'$set': {'data': task_data}},
             upsert=True
         )

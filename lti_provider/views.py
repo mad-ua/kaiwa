@@ -127,6 +127,6 @@ def render_courseware(request, task_id, roles, graded_task):
     context to render the courseware.
     """
     if 'Instructor' in roles or 'Administrator' in roles:
-        return editor(request, task_id=task_id, demo=True)
+        return editor(request, task_id=task_id, demo=False)
     else:
         return chat_view(request, task_id=task_id, graded_task=graded_task)
