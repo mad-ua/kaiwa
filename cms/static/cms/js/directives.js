@@ -34,8 +34,16 @@ angular.module('JSONedit', ['ui.sortable'])
         var refName = "Reference";
         var boolName = "Boolean";
         var numberName = "Number";
+        var nodeName = "Node";
+        var messageName = "Message";
+        var optionName = "Option";
+        var adviserName = "Adviser";
 
-        scope.valueTypes = [stringName, objectName, arrayName, refName, boolName, numberName];
+
+//        console.log("scope = ", scope, "elem = ", element, "attribs = ", attributes);
+
+        scope.valueTypes = [stringName, objectName, arrayName, refName, boolName,
+                            numberName, nodeName, messageName, optionName, adviserName];
         scope.sortableOptions = {
             axis: 'y'
         };
@@ -124,6 +132,7 @@ angular.module('JSONedit', ['ui.sortable'])
                         alert("Please fill in a number");
                         return;
                     }
+                    console.log(scope.valueType, obj);
                     // add item to object
                     switch(scope.valueType) {
                         case stringName: obj[scope.keyName] = scope.valueName ? scope.valueName : "";
@@ -138,6 +147,15 @@ angular.module('JSONedit', ['ui.sortable'])
                                         break;
                         case boolName: obj[scope.keyName] = false;
                                         break;
+                        case messageName:
+                            var maxT=0;
+                            $.map(Object.keys(o), function(e){
+                                var v = parseInt(e.slice(-1));
+                                if (v > maxT) maxT=v;
+                            })
+                            valueName = maxT;
+                            obj["Text" + (maxT + 1)] = scope.valueName ? scope.valueName : "Input message text here";
+                                        break;
                     }
                     //clean-up
                     scope.keyName = "";
@@ -149,6 +167,7 @@ angular.module('JSONedit', ['ui.sortable'])
                     alert("Please fill in a number");
                     return;
                 }
+                console.log(scope.valueType, obj);
                 // add item to array
                 switch(scope.valueType) {
                     case stringName: obj.push(scope.valueName ? scope.valueName : "");
@@ -172,6 +191,92 @@ angular.module('JSONedit', ['ui.sortable'])
         };
         scope.possibleNumber = function(val) {
             return isNumber(val) ? parseFloat(val) : val;
+        };
+
+        // this set of fields helps us to recognize where we are
+        scope.rootFields = ['KC management', 'Nodes management', 'task_id'];
+        scope.nodeFields = ['Answers', 'Messages'];
+        scope.kcManagementFields = ['Name', 'Weight'];
+        scope.optionFields = ['?Score', 'Target', 'Text'];
+        scope.advisersManagementFields = ['Name', 'Avatar'];
+
+        // list of fields which can not be deleted
+        scope.noDelRootFields = ['CT Name', 'Advisers Management', 'KC management', 'Nodes management', 'task_id']
+        scope.noDelNodeFields = ['Answers', 'Messages', 'KC', 'Weight'];
+
+        scope.all = function(obj, keys){
+            return $.map(keys, function(e){
+                if(typeof(e) == "string" && e[0] == '?') { // this means not required field.
+                    return
+                }
+                return obj[e] != undefined;
+            }).indexOf(false) == -1
+        };
+
+        scope.isAdvisersManagementObject = function(object) {
+            return scope.all(object, scope.advisersManagementFields);
+        }
+
+        scope.isRootObject = function(object) {
+            return scope.all(object, scope.rootFields);
+        };
+
+        scope.isNodeObject = function(object) {
+            return scope.all(object, scope.nodeFields);
+        };
+
+        scope.isKcManagementObject = function(object) {
+            return scope.all(object, scope.kcManagementFields);
+        };
+
+        scope.isOptionObject = function(object) {
+            return scope.all(object, scope.optionFields);
+        };
+
+
+        scope._showPlusButton = function(scope, child, key) {
+//            console.log("_showPlusButton child = ", child, " key = ", key);
+            var isRoot = scope.isRootObject(child);
+            var isNode = scope.isNodeObject(child);
+            var isKcManagement = scope.isKcManagementObject(child);
+            var isOption = scope.isOptionObject(child);
+            var isAdvisersManagement = scope.isAdvisersManagementObject(child);
+            if (!isRoot && (isKcManagement || isAdvisersManagement || isOption || isNode || isRoot)) {return false};
+            return true;
+        };
+
+
+        scope._canDeleteNode = function(scope, child, key) {
+            /** Here will be a set of rules for deleting properties, objects in CTE.
+            * We can not delete these properties:
+            * CT Name
+            * Advisers Management
+            * KC Management
+            * * KC -> Name and Weight
+            * But we can delete KC Management -> KC !!!
+            *
+            * Nodes Management
+            * Nodes Management -> Node -> Answers
+            * Nodes Management -> Node -> Weight
+            */
+            var isRoot = scope.isRootObject(child);
+            var isNode = scope.isNodeObject(child);
+            var isKcManagement = scope.isKcManagementObject(child);
+            var isOption = scope.isOptionObject(child);
+            var isAdvisersManagement = scope.isAdvisersManagementObject(child);
+
+//            if(typeof(child) == 'object'){
+//                console.log("canDeleteNode IS ROOT ", isRoot, "child= ", child, "key = ", key);
+//            }
+
+
+            if (isRoot && scope.noDelRootFields.indexOf(key) != -1) {return false};
+            if (!isRoot && isKcManagement && scope.kcManagementFields.indexOf(key) != -1) {return false};
+            if (!isRoot && isOption && scope.optionFields.indexOf(key) != -1) {return false};
+            if (!isRoot && isNode && scope.noDelNodeFields.indexOf(key) != -1) {return false};
+            if (!isRoot && isAdvisersManagement && scope.advisersManagementFields.indexOf(key) != -1) {return false};
+//            if (scope.isRootObject(child))
+            return true;
         };
 
         //////
@@ -204,7 +309,7 @@ angular.module('JSONedit', ['ui.sortable'])
             + '<span ng-switch-when="true">';
                 if (scope.type == "object"){
                    // input key
-                    addItemTemplate += '<input placeholder="Name" type="text" ui-keyup="{\'enter\':\'addItem(child)\'}" '
+                    addItemTemplate += '<input ng-show="$parent.valueType != \''+ messageName +'\'" placeholder="Name" type="text" ui-keyup="{\'enter\':\'addItem(child)\'}" '
                         + 'class="form-control input-sm addItemKeyInput" ng-model="$parent.keyName" /> ';
                 }
                 addItemTemplate += 
@@ -222,10 +327,10 @@ angular.module('JSONedit', ['ui.sortable'])
             + '</span>'
             + '<span ng-switch-default>'
                 // plus button
-                + '<button type="button" class="addObjectItemBtn" ng-click="$parent.showAddKey = true"><i class="glyphicon glyphicon-plus"></i></button>'
+                + '<button type="button" class="addObjectItemBtn" ng-click="$parent.showAddKey = true" ng-show="$parent._showPlusButton($parent, child, key)"><i class="glyphicon glyphicon-plus"></i></button>'
             + '</span>'
         + '</div>';
-    
+
         // start template
         if (scope.type == "object"){
             var template = '<i ng-click="toggleCollapse()" class="glyphicon" ng-class="chevron"></i>'
@@ -238,7 +343,7 @@ angular.module('JSONedit', ['ui.sortable'])
                         + '<input class="keyinput" type="text" ng-model="newkey" ng-init="newkey=key" '
                             + 'ng-blur="moveKey(child, key, newkey)"/>'
                         // delete button
-                        + '<i class="deleteKeyBtn glyphicon glyphicon-trash" ng-click="deleteKey(child, key)"></i>'
+                        + '<i class="deleteKeyBtn glyphicon glyphicon-trash" ng-show="_canDeleteNode($parent, child, key)" ng-click="deleteKey(child, key)"></i>'
                     + '</span>'
                     // object value
                     + '<span class="jsonObjectValue">' + switchTemplate + '</span>'

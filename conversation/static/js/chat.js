@@ -90,6 +90,18 @@ $(window).on('load', function(){
      }
   });
 
+  $.ajax({
+    url: CUI.config.reset_chat_stats_url,
+    method: 'PUT',
+    dataType: 'json',
+    contentType: 'application/json',
+//    data: JSON.stringify(input),
+    cache: false,
+    context: this
+  }).done(function(response){
+    console.log(response);
+  })
+
   // Hide spinner
   timeline.to($loading, 1, {opacity: 0, display: 'none', onComplete: function(){
     // Kill spinner animation timeline

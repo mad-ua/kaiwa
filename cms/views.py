@@ -4,6 +4,7 @@ import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.templatetags.static import static
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
@@ -89,6 +90,16 @@ def create_task(request):
           "Name": "",
           "Weight": 1
         }
+      },
+      "Bot Management": {
+        "name": "Bot name",
+        "bot_avatar":  static("img/bot.jpg"),
+      },
+      "Advisers Management": {
+          "Adviser 1": {
+              "name": "Some adviser",
+              "avatar":  static("img/adviser.jpg"),
+          }
       },
       "Nodes management": {
         "1": {

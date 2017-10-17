@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from conversation.views import chat_view, get_tree, update_score, get_tree_graph
+from conversation.views import (
+    chat_view, get_tree, update_score, get_tree_graph, reset_user_task_score, chat_history, get_chat_status)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -23,7 +24,10 @@ urlpatterns = [
     url(r'^task/(?P<task_id>.+)/*$', chat_view, name='chat_detail'),
     url(r'^tree/(?P<task_id>.+)/*$', get_tree, name='get_tree'),
     url(r'^tree_graph/(?P<task_id>.+)/*$', get_tree_graph, name='get_tree_graph'),
-    url(r'^update_score/(?P<graded_task_id>.+)/*$', update_score, name='update_score'),
+    url(r'^update_score/(?P<graded_task_id>[^/].+)/(?P<msg_id>[^/].+)?/?$', update_score, name='update_score'),
+    url(r'^reset_user_task_score/(?P<task_id>.+)/', reset_user_task_score, name='reset_user_task_score'),
+    url(r'^chat_history/(?P<task_id>.+)/', chat_history, name='chat_history'),
+    url(r'^get_chat_status/(?P<task_id>.+)/', get_chat_status, name='get_chat_status'),
 
     # LTI
     url(r'^lti_provider/', include('lti_provider.urls')),

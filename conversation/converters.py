@@ -1,4 +1,22 @@
+import random
+from django.templatetags.static import static
+
+
 class TaskConverter:
+    ADVISER_MSG_ID_INTERVAL = (10000, 30000)
+    MSG_ID_INTERVAL = (0, 10000)
+
+    FINAL_MESSAGE_TEMPLATE = """You just finished this task and here are your results:<br><br><br>
+    <table class="table">
+    <tr>
+    <td>Total score for this conversational task</td>
+    <td><b>{conversational_task_score}</b></td>
+    </tr>
+    {kc_scores}
+    </table>
+    """
+    FINAL_MSG_KC_SCORE_TEMPLATE = """<tr><td>{kc_name}</td><td>{kc_score}</td></tr>
+    """
     def __init__(self, data):
         self.data = data
 
@@ -9,7 +27,7 @@ class TaskConverter:
                     "nodeDataArray": [],
                     "linkDataArray": []
                 }
-        for i in self.data.get('Nodes management'):
+        for i in sorted(self.data.get('Nodes management'), reverse=True):
             situation = self.data.get('Nodes management')[i]
             self.convert_situation_graph(i, situation)
         return self.graph
@@ -19,10 +37,10 @@ class TaskConverter:
         result['tree']['start_node'] = "1"
         for i in self.data.get('Nodes management'):
             situation = self.data.get('Nodes management')[i]
-            result['tree']['nodes'][i] = self.convert_situation(situation)
+            result['tree']['nodes'][i] = self.convert_situation(situation, id=i)
         return result
 
-    def convert_situation(self, situation):
+    def convert_situation(self, situation, id=0):
         """
         Convert particular situation to actual node.
         """
@@ -30,22 +48,25 @@ class TaskConverter:
             "input": {
                 "type": "options",
                 "url": "0",
-                "options": []
+                "options": [],
+                "kc": situation.get('KC'),
+                "weight": situation.get('Weight')
             },
-            "addMessages": []
+            "addMessages": [],
         }
         for i in situation.get('Messages', ()):
             node['addMessages'].append(
-                self.convert_message(situation.get('Messages')[i])
+                self.convert_message(situation.get('Messages')[i], id=id)
             )
         if not situation.get('Answers'):
+
             node['input']['options'].append(
                 {'text': 'To start', 'value': "1"}
             )
         else:
             for i in situation.get('Answers'):
                 node['input']['options'].append(
-                    self.convert_outcome(situation.get('Answers')[i])
+                    self.convert_outcome(situation.get('Answers')[i], situation.get('Weight'), situation.get('KC'))
                 )
         return node
 
@@ -54,7 +75,7 @@ class TaskConverter:
         Convert to Graph representation.
         """
         self.graph['nodeDataArray'].append(
-            {"id": id, "text": situation.get('Messages')['Text']}
+            {"id": id, "text": situation.get('Messages', {}).get('Text')}
         )
         for i in situation.get('Answers', ()):
             self.graph['linkDataArray'].append({
@@ -63,44 +84,129 @@ class TaskConverter:
                 "text": situation.get('Answers')[i].get('Text')
             })
 
-    def convert_message(self, message):
+    def convert_message(self, message, id):
         """
         Convert Message.
         """
         return {
-            "id": 0,
+            "id": int(id), #random.randint(*self.MSG_ID_INTERVAL),
             "type": "message",
             "name": "Name",
             "userMessage": False,
-            "avatar": "/avatar.jpg",
-            "html": message
+            "avatar": static("img/adviser.jpg"),
+            "html": message,
         }
 
-    def convert_outcome(self, outcome):
+    def convert_user_message(self, user, message, relies_to_msg_id):
+        """Convert message received from user.
+        """
+        return {
+            "id": random.randint(*self.MSG_ID_INTERVAL),
+            "type": "message",
+            "name": user.username,
+            "userMessage": True,
+            "avatar": static("img/avatar-student.jpg"),
+            "html": message['text'],
+            "relies_to_msg_id": relies_to_msg_id,
+            "kc": message['kc'],
+            "node_score": message['score'],
+            # "weight": message['weight'],
+            "next_node_id": message['option'],
+        }
+
+    def convert_outcome(self, outcome, weight=1, kc=''):
         """
         Convert Edge/Outcome.
         """
-        print(outcome)
+        # print(outcome)
         edge = {
             "text": outcome.get('Text'),
             "value": outcome.get('Target'),
+            "score": outcome.get('Score'),
+            "weight": weight,
+            "kc": kc,
         }
+        advisers = outcome.get('Advisers')
+        if advisers:
+            edge['bot'] = self.convert_feedback(advisers)
         return edge
 
-    def convert_feedback(self, feedback):
+    def convert_feedback(self, feedbacks):
         """
         Convert Feedback aka adviser.
-        """
-        feedback = {
-            "addMessages": [
+
+        Simple bot acts like this - just post message to chat. Use this json:
+        {
+          "addMessages": [
+            {
+              "id": 1,
+              "type": "message",
+              "name": "BOT 1",
+              "userMessage": false,
+              "avatar": "/static/img/bot.png",
+              "html": "What is your answer???"
+            }
+          ]
+        }
+        Bot can ask user to re-answer for a question:
+        {
+            "reanswering": true,
+            "input": {
+              "type": "options",
+              "url": "59",
+              "options": [
                 {
-                  "id": "0",
-                  "type": "message",
-                  "name": "BOT 1",
-                  "userMessage": False,
-                  "avatar": None,
-                  "html": 'test'
-                }
+                  "text": "Yes",
+                  "value": "52"
+                },
+                {
+                  "text": "No",
+                  "value": "53"
+                }]
+              },
+            "addMessages": [
+              {
+                "id": 5201,
+                "type": "message",
+                "name": "BOT 1",
+                "userMessage": false,
+                "avatar": "/static/img/bot.png",
+                "html": "Do you want to re-answer for a last question??"
+              }
             ]
         }
-        return feedback
+        """
+        bot = {}
+        bot['addMessages'] = []
+        for name, item in feedbacks.items():
+            bot['addMessages'].append({
+              "id": random.randint(*self.ADVISER_MSG_ID_INTERVAL),
+              "type": "message",
+              "name": "{}".format(name),
+              "userMessage": False,
+              "avatar": None,
+              "html": item.get("Text")
+            })
+        return bot
+
+    def convert_results_message(self, results_data):
+        # FINAL_MESSAGE_TEMPLATE
+        # FINAL_MSG_KC_SCORE_TEMPLATE
+
+        scores_html = "".join([
+            self.FINAL_MSG_KC_SCORE_TEMPLATE.format(kc_name=kc_name, kc_score=kc_score)
+            for kc_name, kc_score in results_data['kc_scores'].items()
+        ])
+        res_html = self.FINAL_MESSAGE_TEMPLATE.format(
+            conversational_task_score=results_data['conversational_task_score'],
+            kc_scores=scores_html
+        )
+        msg = [{
+            'id': random.randint(*self.ADVISER_MSG_ID_INTERVAL),
+            "type": "message",
+            "name": "Name",
+            "userMessage": False,
+            "avatar": None,
+            "html": res_html
+        }]
+        return {"addMessages": msg}

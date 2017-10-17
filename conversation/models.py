@@ -174,7 +174,7 @@ class Feedback(models.Model):
         }
         if self.rethink:
             feedback['reanswering'] = True
-            feedback['input']: {
+            feedback['input'] = {
                 "type": "options",
                 "url": prev_node.id,
                 "options": [

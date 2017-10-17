@@ -25,6 +25,17 @@ CUI.InputOptionModel = function(data){
    */
   this.value = data.value;
 
+  this.kc = data.kc;
+
+  this.weight = data.weight;
+
+  /**
+  * Score of each answer is stored here.
+  * @type {integer}
+  * @public
+  **/
+  this.score = data.score;
+
   /**
    * The text of the input option.
    * @type {string}

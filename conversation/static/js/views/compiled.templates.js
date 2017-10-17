@@ -1,8 +1,8 @@
-/** @file Creates the CUI.templates namespace and defines all templates. */ 
- var CUI = CUI || {}; 
- /** Contains Handlebars view templates 
- * @namespace */ 
- CUI.views = CUI.views || {}; 
+/** @file Creates the CUI.templates namespace and defines all templates. */
+ var CUI = CUI || {};
+ /** Contains Handlebars view templates
+ * @namespace */
+ CUI.views = CUI.views || {};
 this["CUI"] = this["CUI"] || {};
 this["CUI"]["views"] = this["CUI"]["views"] || {};
 this["CUI"]["views"]["chatBreakpoint"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -97,6 +97,12 @@ this["CUI"]["views"]["inputOption"] = Handlebars.template({"compiler":[7,">= 4.0
 
   return "<button class=\"btn chat-option\" data-option-value=\""
     + alias4(((helper = (helper = helpers.value || (depth0 != null ? depth0.value : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"value","hash":{},"data":data}) : helper)))
+    + "\" data-option-score=\""
+    + alias4(((helper = (helper = helpers.score || (depth0 != null ? depth0.score : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"score","hash":{},"data":data}) : helper)))
+    + "\" data-option-kc=\""
+    + alias4(((helper = (helper = helpers.kc || (depth0 != null ? depth0.kc : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"kc","hash":{},"data":data}) : helper)))
+    + "\" data-option-weight=\""
+    + alias4(((helper = (helper = helpers.weight || (depth0 != null ? depth0.weight : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"weight","hash":{},"data":data}) : helper)))
     + "\">"
     + alias4(((helper = (helper = helpers.text || (depth0 != null ? depth0.text : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"text","hash":{},"data":data}) : helper)))
     + "</button>\n";
@@ -104,8 +110,6 @@ this["CUI"]["views"]["inputOption"] = Handlebars.template({"compiler":[7,">= 4.0
 this["CUI"]["views"]["sidebarBreakpoint"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     return " unlocked ";
 },"3":function(container,depth0,helpers,partials,data) {
-    return " done ";
-},"4":function(container,depth0,helpers,partials,data) {
     return " started ";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function";
@@ -125,8 +129,6 @@ this["CUI"]["views"]["sidebarBreakpoint"] = Handlebars.template({"1":function(co
 this["CUI"]["views"]["sidebarResources"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     return " unlocked ";
 },"3":function(container,depth0,helpers,partials,data) {
-    return " done ";
-},"4":function(container,depth0,helpers,partials,data) {
     return " started ";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function";

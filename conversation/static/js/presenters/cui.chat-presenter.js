@@ -14,7 +14,7 @@ var CUI = CUI || {};
  */
 CUI.ChatPresenter = function(chatID, historyUrl, progressUrl, resourcesUrl){
   // Check arguments
-  if(typeof chatID !== 'number') throw new Error('CUI.ChatPresenter(): Invalid chatID.');
+//  if(typeof chatID !== 'number') throw new Error('CUI.ChatPresenter(): Invalid chatID.');
 //  if(!historyUrl) throw new Error('CUI.ChatPresenter(): No historyUrl.');
 //  if(!progressUrl) throw new Error('CUI.ChatPresenter(): No progressUrl.');
 //  if(!resourcesUrl) throw new Error('CUI.ChatPresenter(): No resourcesUrl.');
@@ -229,17 +229,47 @@ CUI.ChatPresenter.prototype._getMessages = function(url){
     console.log(CUI.tree.nodes[url]);
   }
   data = CUI.tree.nodes[url];
-  if (data === undefined) {return}
-    if(data.input) this._setInput(data.input);
-    else throw new Error("CUI.ChatPresenter._getMessages(): No data.input.");
+  if (data === undefined) {
+    console.log("FSM ENDED");
+    $.ajax({
+      url: CUI.config.get_chat_status_url,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json',
+//      data: JSON.stringify(data.addMessages),
+      cache: false,
+      context: this
+    }).done(function(data){
+      console.log(data);
+      this._parseMessages(data, true);
+    });
+    return
+  }
+  if(data.input) this._setInput(data.input);
+  else throw new Error("CUI.ChatPresenter._getMessages(): No data.input.");
 
     // Update chat with new messages
-    if(data.addMessages) this._parseMessages(data, true);
+  if(data.addMessages) {
+    // Post messages to the server
+      $.ajax({
+        url: CUI.config.historyUrl,
+        method: 'PUT',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(data.addMessages),
+        cache: false,
+        context: this
+      }).done(function(response){
+        //  console.log(response);
+        this._parseMessages(data, true);
+      });
+    }
     else throw new Error("CUI.ChatPresenter._getMessages(): No data.addMessages.");
 
     // Hide spinner
     this._hideLoading();
-    if (data.final) this._sendGrade(data.grade);
+//    this._sendGrade(data.grade);
+//    if (!data.final) this._sendGrade(data.grade);
 //  }).fail(function(){ throw new Error("CUI.ChatPresenter._getMessages(): Failed to load messages."); });
 };
 
@@ -268,79 +298,104 @@ CUI.ChatPresenter.prototype._postInput = function(input){
   this._inputIsEnabled = false;
 
   // Add selected elements to input
-  input.selected = this._findSelectedValues();
+//  input.selected = this._findSelectedValues();
   input.chat_id = this._chatID;
 
-  var msg_txt = '';
-  var selected_option_model = undefined;
-  if(input.option) {
-    for (var i in this._inputOptions) {
-      if (
-        this._inputOptions[i]._model.value == input.option &&
-        this._inputOptions[i]._model.text == input.text
-      ) {
-        selected_option_model = this._inputOptions[i]._model
-        msg_txt = selected_option_model.text
-        if (selected_option_model.bot) {
-          console.log(selected_option_model.bot);
-        }
-        break;
-      }
-    }
-  }
-
-  // Show loading
-  var message_model = new CUI.ChatMessageModel({
-    html: msg_txt || input.text,
-    id: Math.round(Math.random() * 100 * 100),
-    userMessage: true
-  })
-  this._addMessage(message_model);
-  // show message in the chat
-  // var me = this;
   this._showLoading();
 
-  function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-  }
-  var interval_min = 1000;
-  var interval_max = 3000;
-  var bot_interval_min = interval_min,
-      bot_interval_max = interval_max;
-  if (selected_option_model.bot) {
-    interval_max += 1000;
-    interval_min += 1000;
+  // Send grades [grading, score]
+  $.ajax({
+    url: CUI.config.grading_url,
+    method: 'PUT',
+    dataType: 'json',
+    contentType: 'application/json',
+    data: JSON.stringify(input),
+    cache: false,
+    context: this
+  }).done(function(response){
 
-    var bot = selected_option_model.bot;
+      console.log(response);
 
-    if (CUI.config.DEBUG) {
-      console.log("BOT = ", bot);
-      console.log("bot_interval_min = ", bot_interval_min);
-      console.log("bot_interval_max = ", bot_interval_max);
-    }
-
-    window.setTimeout($.proxy(function(){
-      if (bot.getMessage == 'random') {
-        // TODO: Implement random choice of bot message
-        console.log("Random choice message");
-      } else if (bot.getMessage == 'all' || !bot.getMessage) {
-        this._addMessage(bot.message, true);
-        if (bot.reanswering) {
-          // console.log("BOT ", bot);
-          this._setInput(bot.input);
-          this._hideLoading();
+      var msg_txt = '';
+      var selected_option_model = undefined;
+      if(input.option) {
+        for (var i in this._inputOptions) {
+          if (
+            this._inputOptions[i]._model.value == input.option &&
+            this._inputOptions[i]._model.text == input.text
+          ) {
+            selected_option_model = this._inputOptions[i]._model
+            msg_txt = selected_option_model.text
+            if (selected_option_model.bot) {
+              console.log(selected_option_model.bot);
+            }
+            break;
+          }
         }
       }
-    }, this), bot_interval_min, bot_interval_max)
-  }
 
-  if (!bot || !bot.reanswering) {
-    window.setTimeout(
-      $.proxy(function(){
-        this._getMessages(this._inputUrl);
-      }, this), getRandomInt(interval_min, interval_max)
-    )
-  }
+      // Show loading
+      var message_model = new CUI.ChatMessageModel({
+        html: msg_txt || input.text,
+        id: Math.round(Math.random() * 100 * 100),
+        userMessage: true
+      })
+      this._addMessage(message_model);
+      // show message in the chat
+      // var me = this;
+      this._showLoading();
+
+      function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+      }
+      var interval_min = 1000;
+      var interval_max = 3000;
+      var bot_interval_min = interval_min,
+          bot_interval_max = interval_max;
+      if (selected_option_model.bot) {
+        interval_max += 1000;
+        interval_min += 1000;
+
+        var bot = selected_option_model.bot;
+
+        if (CUI.config.DEBUG) {
+          console.log("BOT = ", bot);
+          console.log("bot_interval_min = ", bot_interval_min);
+          console.log("bot_interval_max = ", bot_interval_max);
+        }
+
+        window.setTimeout($.proxy(function(){
+          if (bot.getMessage == 'all' || !bot.getMessage) {
+            this._addMessage(bot.message, true);
+            // POST Adviser message to history chat
+            $.ajax({
+              url: CUI.config.historyUrl,
+              method: 'PUT',
+              dataType: 'json',
+              contentType: 'application/json',
+              data: JSON.stringify(bot.message),
+              cache: false,
+              context: this
+            }).done(function(response){
+                console.log(response);
+            });
+            if (bot.reanswering) {
+              // console.log("BOT ", bot);
+              this._setInput(bot.input);
+              this._hideLoading();
+            }
+          }
+        }, this), bot_interval_min, bot_interval_max)
+      }
+
+      if (!bot || !bot.reanswering) {
+        window.setTimeout(
+          $.proxy(function(){
+            this._getMessages(this._inputUrl);
+          }, this), getRandomInt(interval_min, interval_max)
+        )
+      }
+  });
 
   if (CUI.config.DEBUG){
     console.log("CUI.ChatPresenter.prototype._postInput ", this._inputUrl);
@@ -376,9 +431,17 @@ CUI.ChatPresenter.prototype._postText = function(){
  * @protected
  * @param {string} optionValue     - The selected option's value.
  */
-CUI.ChatPresenter.prototype._postOption = function(optionValue, text){
+CUI.ChatPresenter.prototype._postOption = function(optionValue, text, score, kc, weight){
   // Create input object
-  var input = {option: optionValue, text: text};
+  var input = {option: optionValue, text: text, kc: kc };
+  /**
+   *
+   *  MOVE this calculations to backend side, for security reason.
+   *
+   **/
+  input.score = weight * score;
+  // END MOVE
+
   input.chat_id = this._chatID;
 
   // Send input to server
@@ -750,6 +813,7 @@ CUI.ChatPresenter.prototype._getScrollSpeed = function(scrollTo){
  * @param {object} input          - An object with settings for the input type.
  */
 CUI.ChatPresenter.prototype._setInput = function(input){
+  console.log(input);
   var $text;
   var $options;
   var $custom;
@@ -811,6 +875,7 @@ CUI.ChatPresenter.prototype._setInput = function(input){
    // Create a button for each option
    $.each(input.options, $.proxy(function(i, o){
      // Create a new input option
+     o.kc = input.kc;
      var inputOption = new CUI.InputOptionPresenter(new CUI.InputOptionModel(o));
      this._inputOptions.push(inputOption);
 
@@ -884,7 +949,15 @@ CUI.ChatPresenter.prototype._addEventListeners = function(){
     e.preventDefault();
 
     // Post input to server
-    this._postOption($(e.currentTarget).data('option-value'), $(e.currentTarget).text());
+    var inpt = $(e.currentTarget);
+    this._postOption(
+      inpt.data('option-value'),
+      inpt.text(),
+      inpt.data('option-score'),
+      inpt.data('option-kc'),
+      inpt.data('option-weight'),
+      inpt.data('option-id')
+    );
   }, this));
 
   // Delegated events for sidebar breakpoint links

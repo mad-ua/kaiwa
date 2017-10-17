@@ -43,6 +43,7 @@ CUI.InputOptionPresenter = function(model){
  * @protected
  */
 CUI.InputOptionPresenter.prototype._render = function(){
+  console.log("CUI.InputOptionPresenter.prototype._render", this._model);
   this.el = CUI.views.inputOption(this._model);
   this.$el = $(this.el);
 };
