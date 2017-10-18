@@ -48,6 +48,9 @@ def get_tree(request, *args, **kwargs):
     #     task_data['task_id'] = task_id
     #     task_data['task_name'] = task.name
     chat_data = TaskConverter(task_data).convert()
+
+    print(chat_data['tree']['nodes'].keys())
+
     return JsonResponse(chat_data)
 
 
@@ -64,16 +67,16 @@ def get_tree_graph(request, *args, **kwargs):
     #     task_data['task_id'] = task_id
     #     task_data['task_name'] = task.name
     chat_data = TaskConverter(task_data).convert_graph()
-
     return JsonResponse(chat_data)
 
 
 def chat_history(request, task_id):
     if request.method in ('POST', 'PUT'):
-        print("CHAT HISTORY")
         data = json.loads(request.body)
-        graded_history_storage.store_messages(user_id=request.user.id, task_id=task_id, messages=data)
-        return JsonResponse(data=data, safe=False)
+        if not data:
+            return JsonResponse(data=data, safe=False)
+        messages = graded_history_storage.store_messages(user_id=request.user.id, task_id=task_id, messages=data)
+        return JsonResponse(data=messages, safe=False)
     messages = graded_history_storage.get_chat_history(request.user.id, task_id, actual=True).get('messages', [])
     return JsonResponse(data=messages, safe=False)
 

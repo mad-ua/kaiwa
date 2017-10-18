@@ -85,18 +85,19 @@ class GradedHistoryStorage(MongoBase):
         """
         if isinstance(messages, (list, tuple)):
             messages = [self.filter_history_fields(msg) for msg in messages]
-            msg = {'$push': {'messages': {'$each': messages}}}
+            update_cmd = {'$push': {'messages': {'$each': messages}}}
             for message in messages:
                 message['ts'] = datetime.datetime.utcnow()
         else:
             messages = self.filter_history_fields(messages)
-            msg = {'$push': {'messages': messages}}
+            update_cmd = {'$push': {'messages': messages}}
             messages['ts'] = datetime.datetime.utcnow()
         self.collection.update(
             {'task_id': task_id, 'user_id': user_id, 'actual': True},
-            msg,
+            update_cmd,
             upsert=True
         )
+        return messages
 
     def get_chat_history(self, user_id, task_id, actual=True):
         return self.collection.find_one(
@@ -145,7 +146,7 @@ class GradedHistoryStorage(MongoBase):
 
         for kc in kc_node_weights_sum:
             # history['KC'] contains a sum of all scores for that KC
-            kc_scores[kc] = float(history['KC'][kc]) / float(kc_node_weights_sum[kc])
+            kc_scores[kc] = float(history.get('KC', {}).get(kc, 0)) / float(kc_node_weights_sum[kc])
 
         conversational_task_score = (
             sum([float(score) * float(task['KC management'][name]['Weight']) for name, score in kc_scores.items()]) /

@@ -59,9 +59,8 @@ class TaskConverter:
                 self.convert_message(situation.get('Messages')[i], id=id)
             )
         if not situation.get('Answers'):
-
             node['input']['options'].append(
-                {'text': 'To start', 'value': "1"}
+                {'text': 'To start', 'value': "1", 'resetChat': 1}
             )
         else:
             for i in situation.get('Answers'):
