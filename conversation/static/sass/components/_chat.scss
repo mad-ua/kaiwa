@@ -1,15 +1,10 @@
 /* --- Chat grid system --- */
 .chat-container {
+  @extend %clearfix;
   position: relative;
-  max-width: 960px;
-  padding: 0 80px;
+  max-width: 870px;
+  padding: 0 $fullscreen-toggle-width + 10px;
   margin: 0 auto;
-
-  &:after {
-    content: '';
-    display: table;
-    clear: both;
-  }
 }
 
 .chat-row {
@@ -112,7 +107,7 @@
       text-align: left;
 
       &:hover, :active, &:focus {
-        color: $brand-green;
+        color: $brand-gray;
         text-decoration: none;
         opacity: 0.5;
       }
@@ -173,7 +168,7 @@
       left: 0;
       font-size: 17px;
       line-height: 20px;
-      color: $brand-green;
+      color: $brand-gray;
       // IE8 SVG fallback https://css-tricks.com/using-svg/
       background: url(../img/chat-back.png) no-repeat 42px 42px;
       background-image: url(../img/chat-back.svg), none;
@@ -182,7 +177,7 @@
       transition: all 0.2s;
 
       &:hover, :active, &:focus {
-        color: $brand-green;
+        color: $brand-gray;
         text-decoration: none;
         opacity: 0.5;
       }
@@ -200,7 +195,7 @@
   .cover {
     width: 120px;
     height: 180px;
-    background: #F0F4F7;
+    background: $brand-bg;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -256,7 +251,7 @@
   }
 
   .cta {
-    background: #F0F4F7;
+    background: $brand-bg;
     padding: 30px 0;
     text-align: center;
   }
@@ -264,33 +259,33 @@
 
 /* --- Chat messages container --- */
 .chat-messages {
-  background: #F0F4F7;
+  background: $brand-bg;
   display: none;
   min-height: 100%;
   padding-top: 20px;
-  padding-bottom: 120px;
+  padding-bottom: 140px;
 }
 
 /* --- Avatars --- */
 .chat-avatar {
   display: inline-block;
-  width: 44px;
-  height: 44px;
-  border-radius: 4px;
-  background: #F0F4F7;
-  box-shadow: 0 0 1px 0 rgba(0,0,0,0.3), 0 1px 3px 0 rgba(0,0,0,0.12);
-  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: $brand-bg;
+  border: 3px solid #fff;
 }
 
 /* --- Message --- */
 .chat-message {
   position: relative;
-  margin-top: 20px;
-  min-height: 90px; // Ensures that messages have a height when waiting for content like images
+  margin-top: 12px;
+  min-height: 42px; // Ensures that messages have a height when waiting for content like images
 
   & > .chat-container > .inner {
+    @extend %clearfix;
     position: relative;
-    padding-left: 88px;
+    padding: 0 $avatar-side-padding;
 
     &:hover .chat-actions {
       opacity: 1;
@@ -300,16 +295,17 @@
 
   .chat-avatar {
     position: absolute;
-    top: 22px;
+    top: 1px;
     left: 0;
   }
 
   .chat-bubble {
     position: relative;
+    display: inline-block;
     background: #fff;
-    border-radius: 4px;
-    padding: 34px 80px 34px 40px; // 120px
-    box-shadow: 0 0 1px 0 rgba(0,0,0,0.3), 0 1px 3px 0 rgba(0,0,0,0.12);
+    border-radius: $brand-border-radius;
+    padding: 10px 16px;
+    box-shadow: 2px 0 30px 0 rgba(83, 117, 140, .2);
 
     > *:first-child {
       margin-top: 0;
@@ -366,7 +362,7 @@
     blockquote {
       padding: 12px 120px 12px 36px;
       margin: 26px 0 0 -40px;
-      border-left: 4px solid $brand-green;
+      border-left: 4px solid $brand-gray;
 
       p {
         margin: 0;
@@ -537,43 +533,34 @@
       content: "";
       display: block;
       position: absolute;
-      top: 35px;
-      left: -6px;
-      width: 20px;
-      height: 20px;
-      background: #fff;
-      transform: rotate(45deg);
-      border-radius: 4px;
-      box-shadow: 0 0 1px 0 rgba(0,0,0,0.3), 0 1px 3px 0 rgba(0,0,0,0.12);
-    }
-
-    &:after {
-      content: "";
-      display: block;
-      position: absolute;
-      top: 32px;
-      left: 0;
-      width: 20px;
-      height: 30px;
-      background: #fff;
+      top: 16px;
+      left: -8px;
+      width: 0;
+      height: 0;
+      border-top: 6px solid transparent;
+      border-right: 8px solid #FFF;
+      border-bottom: 6px solid transparent;
     }
   }
 }
 
 /* --- User message --- */
 .chat-message.chat-message-text.chat-message-user {
+  .chat-avatar {
+    left: auto;
+    right: 0;
+  }
+
   .chat-bubble {
-    background: #D6E9D8;
-    box-shadow: 0 0 1px 0 rgba(43,51,41,0.6), 0 1px 3px 0 rgba(0,0,0,0.12);
-    color: #313330;
+    float: right;
+    background: $brand-violet;
+    color: $text-color-light;
 
     &:before {
-      background: #D6E9D8;
-      box-shadow: 0 0 1px 0 rgba(43,51,41,0.6), 0 1px 3px 0 rgba(0,0,0,0.12);
-    }
-
-    &:after {
-      background: #D6E9D8;
+      border-left: 8px solid $brand-violet;
+      border-right: 0 none;
+      left: auto;
+      right: -8px;
     }
   }
 }
@@ -642,7 +629,7 @@
   text-align: center;
 
   span {
-    background: #F0F4F7;
+    background: $brand-bg;
     padding: 0 20px;
     position: relative;
     display: inline-block;
@@ -651,7 +638,6 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     color: #9E9DA6;
-    position: relative;
     top: -7px;
   }
 }
@@ -667,19 +653,18 @@
 
   > .inner {
     position: relative;
-    padding: 0 40px;
     background: #fff;
-    min-height: 80px;
-    box-shadow: 0 0 1px 0 rgba(0,0,0,0.3), 0 1px 3px 0 rgba(0,0,0,0.12);
+    min-height: 100px;
+    box-shadow: 0 0 25px 0 rgba(83, 117, 140, .2);
   }
 
   .sidebar-toggle, .fullscreen-toggle {
     position: absolute;
     top: 0;
     left: 0;
-    width: 80px;
+    width: $fullscreen-toggle-width;
     height: 100%;
-    border-right: 1px solid #EBEEF0;
+    border-right: 1px solid #ebdefe;
     cursor: pointer;
     z-index: 1002;
     backface-visibility: hidden;
@@ -694,7 +679,7 @@
     display: block;
     position: absolute;
     top: 50%;
-    left: 20px;
+    left: 24px;
     margin-top: -20px;
     width: 40px;
     height: 40px;
@@ -718,7 +703,10 @@
     left: auto;
     right: 0;
     border-right: none;
-    border-left: 1px solid #EBEEF0;
+    border-left: 1px solid #ebdefe;
+    font-size: 0;
+    line-height: 0;
+    color: transparent;
   }
 
   .fullscreen-toggle span {
@@ -735,8 +723,8 @@
 
   .chat-avatar {
     position: absolute;
-    top: 18px;
-    left: 80px;
+    top: 30px;
+    right: $fullscreen-toggle-width + 10px;
   }
 
   .chat-progress {
@@ -746,8 +734,8 @@
     width: 80px;
     height: 8px;
     z-index: 1003;
-    background: #F6FBF5;
-    border-top: 1px solid #AEDDA4;
+    background: #ebdefe;
+    border-top: 1px solid #beb1d1;
 
     span {
       position: absolute;
@@ -756,21 +744,21 @@
       width: 2px;
       height: 8px;
       border-radius: 0 4px 4px 0;
-      border: 1px solid #43B02A;
-      background: $brand-green;
+      border: 1px solid $brand-violet;
+      background: $brand-violet;
       background: repeating-linear-gradient(
         45deg,
-        #43B02A,
-        #43B02A 6px,
-        #61BD4D 6px,
-        #61BD4D 12px
+        $brand-violet,
+        $brand-violet 6px,
+        #ba9ee2 6px,
+        #ba9ee2 12px
       );
     }
   }
 
   .chat-input {
     display: none;
-    padding-left: 84px;
+    padding: 0 $avatar-side-padding;
   }
 
   .chat-input-text {
@@ -807,16 +795,17 @@
   }
 
   .chat-input-options {
-    padding-top: 18px;
+    padding-top: 30px;
+    text-align: right;
 
     .btn {
-      margin: 0 12px 18px 0;
+      margin: 0 8px 10px 0;
       font-weight: normal;
     }
   }
 
   .chat-input-custom {
-    padding-top: 18px;
+    padding-top: 30px;
   }
 }
 
@@ -827,7 +816,7 @@
   left: -320px;
   width: 320px;
   height: 100%;
-  background: $brand-dark;
+  background: #1E1A34;
   z-index: 1100;
   color: #B1B0B9;
   overflow-y: auto;
@@ -850,7 +839,7 @@
       float: left;
       width: 56px;
       height: 80px;
-      background-color: #F0F4F7;
+      background-color: $brand-bg;
       background-position: center center;
       background-repeat: no-repeat;
       background-size: cover;
@@ -937,7 +926,7 @@
 
 /* --- Chat spinner --- */
 .chat-loading {
-  text-align: right;
+  text-align: left;
   display: none;
 
   span {
@@ -946,7 +935,7 @@
     height: 6px;
     border-radius: 3px;
     background: #B1B0B9;
-    margin-top: 40px;
+    margin-top: 50px;
     margin-left: 6px;
 
     &:first-child {
@@ -976,7 +965,7 @@ img.zoom-img {
 }
 .zoom-overlay {
   z-index: 2000;
-  background: #F0F4F7;
+  background: $brand-bg;
   position: fixed;
   top: 0;
   left: 0;

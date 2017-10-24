@@ -4,9 +4,9 @@ html {
 
 body {
   height: 100%;
-  background: #F0F4F7;
+  background: $brand-bg;
   font: normal 15px/22px $brand-font;
-  color: #333;
+  color: $brand-gray;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -16,13 +16,13 @@ main {
 
 /* -- Element defaults */
 a, a:visited {
-	color: $brand-green;
+	color: $brand-violet;
 	text-decoration: none;
 	transition: all 0.3s;
 }
 
 a:hover, a:active, a:focus {
-	color: $brand-green;
+	color: $brand-violet;
 	text-decoration: underline;;
 }
 
