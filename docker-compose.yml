@@ -3,6 +3,7 @@ version: '2'
 services:
   kaiwa:
     container_name: kaiwa
+    restart: unless-stopped
     env_file: ./envs/local.env
     build:
       context: .
@@ -18,6 +19,7 @@ services:
 
   postgres:
     container_name: kaiwa-postgres
+    restart: unless-stopped
     image: postgres:9.6
     env_file: ./envs/local.env
     volumes:
