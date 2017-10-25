@@ -365,19 +365,23 @@ CUI.ChatPresenter.prototype._postInput = function(input){
         }
 
         window.setTimeout($.proxy(function(){
-          if (bot.getMessage == 'all' || !bot.getMessage) {
-            this._addMessage(bot.message, true);
+          if (bot.messages) {
+            for (var i in bot.messages){
+              this._addMessage(bot.messages[i], true);
+            }
             // POST Adviser message to history chat
             $.ajax({
               url: CUI.config.historyUrl,
               method: 'PUT',
               dataType: 'json',
               contentType: 'application/json',
-              data: JSON.stringify(bot.message),
+              data: JSON.stringify(bot.messages),
               cache: false,
               context: this
             }).done(function(response){
                 console.log(response);
+            }).error(function(response){
+                console.log("Sending bot msg to server fault!");
             });
             if (bot.reanswering) {
               // console.log("BOT ", bot);

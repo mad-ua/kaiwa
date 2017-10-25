@@ -107,8 +107,8 @@ class TaskConverter:
             "avatar": static("img/avatar-student.jpg"),
             "html": message['text'],
             "relies_to_msg_id": relies_to_msg_id,
-            "kc": message['kc'],
-            "node_score": message['score'],
+            "kc": message.get('kc'),
+            "node_score": int(message['score'] or 0),
             # "weight": message['weight'],
             "next_node_id": message['option'],
         }
@@ -121,7 +121,7 @@ class TaskConverter:
         edge = {
             "text": outcome.get('Text'),
             "value": outcome.get('Target'),
-            "score": outcome.get('Score'),
+            "score": int(outcome.get('Score') or 0),
             "weight": weight,
             "kc": kc,
         }
@@ -177,7 +177,32 @@ class TaskConverter:
         """
         bot = {}
         bot['addMessages'] = []
+        advisers_obj = self.data['Advisers Management']
+        for name, adviser_obj in advisers_obj.items():
+            opt_adviser = feedbacks[name]
+            bot['addMessages'].append({
+              "id": random.randint(*self.ADVISER_MSG_ID_INTERVAL),
+              "type": "message",
+              "name": "{}".format(adviser_obj['Name']),
+              "userMessage": False,
+              "avatar": adviser_obj['Avatar'],
+              "html": opt_adviser.get("Text")
+            })
+            if opt_adviser.get('Target'):
+                bot["reanswering"] = 1
+                bot['input'] = {
+                    "type": "options",
+                    "url": opt_adviser['Target'],
+                    "options": [
+                    {
+                      "text": opt_adviser.get('Button Text') or 'OK',
+                      "value": opt_adviser.get('Target')
+                    }]
+                }
+
+        '''
         for name, item in feedbacks.items():
+
             bot['addMessages'].append({
               "id": random.randint(*self.ADVISER_MSG_ID_INTERVAL),
               "type": "message",
@@ -186,6 +211,8 @@ class TaskConverter:
               "avatar": None,
               "html": item.get("Text")
             })
+        '''
+
         return bot
 
     def convert_results_message(self, results_data):

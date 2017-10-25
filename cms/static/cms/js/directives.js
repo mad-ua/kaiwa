@@ -41,6 +41,7 @@ angular.module('JSONedit', ['ui.sortable'])
         var refName = "Reference";
         var boolName = "Boolean";
         var numberName = "Number";
+
         var nodeName = "Node";
         var messageName = "Message";
         var optionName = "Option";
@@ -59,7 +60,8 @@ angular.module('JSONedit', ['ui.sortable'])
             'Messages': {
                 'Text 1': 'Input response text here'
             },
-            'Weight': 1
+            'Weight': 1,
+            'KC': 'Input KC here'
         };
 
         var defaultOptionObject = {
@@ -302,7 +304,7 @@ angular.module('JSONedit', ['ui.sortable'])
             var isKcManagement = scope.isKcManagementObject(child);
             var isOption = scope.isOptionObject(child);
             var isAdvisersManagement = scope.isAdvisersManagementObject(child);
-            if (!isRoot && (isKcManagement || isAdvisersManagement || isOption || isNode || isRoot)) {return false};
+            if (isRoot || (!isRoot && (isKcManagement || isAdvisersManagement || isOption || isNode || isRoot))) {return false};
             return true;
         };
 
@@ -365,6 +367,14 @@ angular.module('JSONedit', ['ui.sortable'])
                 if (scope.type == "object"){
                     // input key
                     // Input for Message
+//                    TODO: FIXME: Next construction doesn't work... I don't know why,
+//                    addItemTemplate += '<span ng-switch on="getType(val)">'
+//                       +'<input ng-switch-when="\''+messageName+'\'" value="{{ _getMessagePlaceholder(child) }}" type="text" ui-keyup="{\'enter\':\'addItem(child)\'}" '
+//                        + 'class="form-control input-sm addItemKeyInput" ng-model="$parent.keyName" /> '
+//
+//                        +'<input ng-switch-default type="text" ui-keyup="{\'enter\':\'addItem(child)\'}" '
+//                        + 'class="form-control input-sm addItemKeyInput" ng-model="$parent.keyName" /> '
+//                    + '</span>';
                     addItemTemplate += '<input ng-show="$parent.valueType == \''+messageName+'\'" value="{{ _getMessagePlaceholder(child) }}" type="text" ui-keyup="{\'enter\':\'addItem(child)\'}" '
                         + 'class="form-control input-sm addItemKeyInput" ng-model="$parent.keyName" /> '
                     // Input for all other fields
