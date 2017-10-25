@@ -44,10 +44,10 @@
     border-bottom: 2px solid #fff;
 
     &:hover, &:active, &:focus, &.course-content-tabs--selected {
-      color: $brand-green;
+      color: $brand-gray;
       padding-bottom: 28px;
-      border-color: $brand-green;
-      color: $brand-green;
+      border-color: $brand-gray;
+      color: $brand-gray;
       text-decoration: none;
     }
   }
@@ -110,8 +110,8 @@
   width: 100%;
   height: 8px;
   z-index: 1003;
-  background: #F6FBF5;
-  border-top: 1px solid #AEDDA4;
+  background: #ebdefe;
+  border-top: 1px solid #beb1d1;
   border-radius: 0 0 4px 4px;
 
   span {
@@ -121,14 +121,14 @@
     width: 2px;
     height: 8px;
     border-radius: 0 4px 4px 4px;
-    border: 1px solid #43B02A;
-    background: $brand-green;
+    border: 1px solid $brand-violet;
+    background: $brand-violet;
     background: repeating-linear-gradient(
       45deg,
-      #43B02A,
-      #43B02A 6px,
-      #61BD4D 6px,
-      #61BD4D 12px
+      $brand-violet,
+      $brand-violet 6px,
+      #ba9ee2 6px,
+      #ba9ee2 12px
     );
   }
 }
