@@ -55,9 +55,17 @@ angular.module('JSONedit', ['ui.sortable'])
             'Text': 'Input option text here'
         };
 
+        var defaultAdviserObject = {
+            'Target': 0,
+            'Text': 'Some text that adviser should say',
+            'Answers': [defaultOptionObject]
+        }
+
+        var defaultAnswerOption = Object.assign({'Advisers': {'Adviser 1': defaultAdviserObject}}, defaultOptionObject)
+
         var defaultNodeObject = {
             'Answers': {
-                'Option 1': defaultOptionObject
+                'Option 1': defaultAnswerOption
             },
             'Messages': {
                 'Text 1': 'Input response text here'
@@ -65,17 +73,6 @@ angular.module('JSONedit', ['ui.sortable'])
             'Weight': 1,
             'KC': 'Input KC here'
         };
-
-        var defaultAdviserObject = {
-            'Target': 0,
-            'Text': 'Some text that adviser should say',
-            'Answers': [defaultOptionObject]
-        }
-
-        var defaultAnswerOption = Object.assign({}, defaultOptionObject)
-
-
-//        console.log("scope = ", scope, "elem = ", element, "attribs = ", attributes);
 
         scope.valueTypes = [stringName, objectName, arrayName, refName, boolName,
                             numberName, nodeName, messageName, optionName, adviserName];
@@ -156,6 +153,7 @@ angular.module('JSONedit', ['ui.sortable'])
             })
             return "Text " + (maxT + 1);
         };
+
         scope.addItem = function(obj) {
             if (getType(obj) == "Object") {
                 // check input for key
@@ -197,11 +195,10 @@ angular.module('JSONedit', ['ui.sortable'])
                         */
                         case nodeName: obj[scope.keyName] = defaultNodeObject;
                                         break;
-                        case optionName: obj[scope.keyName] = defaultOptionObject;
+                        case optionName: obj[scope.keyName] = defaultAnswerOption;
                                         break;
                         case adviserName: obj[scope.keyName] = defaultAdviserObject;
                                         break;
-                        case advisersName:
                         case messageName: obj[scope.keyName] = scope.valueName ? scope.valueName : "Input message text here";
                                         break;
                     }
@@ -215,7 +212,6 @@ angular.module('JSONedit', ['ui.sortable'])
                     alert("Please fill in a number");
                     return;
                 }
-                console.log(scope.valueType, obj);
                 // add item to array
                 switch(scope.valueType) {
                     case stringName: obj.push(scope.valueName ? scope.valueName : "");
@@ -237,7 +233,7 @@ angular.module('JSONedit', ['ui.sortable'])
                     */
                     case nodeName: obj.push(defaultNodeObject);
                                     break;
-                    case optionName: obj.push(defaultOptionObject);
+                    case optionName: obj.push(defaultAnswerOption);
                                     break;
                     case adviserName:obj.push(defaultAdviserObject);
                                     break;
@@ -272,7 +268,6 @@ angular.module('JSONedit', ['ui.sortable'])
         var cantAddInKcManagement = true;
         var cantAddIndvisersManagement = true;
 
-
         scope.all = function(obj, keys){
             return $.map(keys, function(e){
                 if(typeof(e) == "string" && e[0] == '?') { // this means not required field.
@@ -302,7 +297,6 @@ angular.module('JSONedit', ['ui.sortable'])
             return scope.all(object, scope.optionFields);
         };
 
-
         scope._showPlusButton = function(scope, child, key) {
 //            console.log("_showPlusButton child = ", child, " key = ", key);
             var isRoot = scope.isRootObject(child);
@@ -318,7 +312,6 @@ angular.module('JSONedit', ['ui.sortable'])
                 (cantAddInRoot && isRoot)))) {return false};
             return true;
         };
-
 
         scope._canDeleteNode = function(scope, child, key) {
             /** Here will be a set of rules for deleting properties, objects in CTE.
@@ -405,7 +398,7 @@ angular.module('JSONedit', ['ui.sortable'])
                 + '<span ng-show="$parent.valueType == \''+stringName+'\'"> : <input type="text" placeholder="Value" '
                     + 'class="form-control input-sm addItemValueInput" ng-model="$parent.valueName" ui-keyup="{\'enter\':\'addItem(child)\'}"/></span> '
 
-                + '<span ng-show="$parent.valueType == \''+messageName+'\'"> : <textarea cols="{{ msgTextCols }}" rows="{{ msgTextRows }}" type="text" placeholder="Input Message text here" '
+                + '<span ng-show="$parent.valueType == \''+messageName+'\'"> : <textarea cols="{{ msgTextCols }}" rows="{{ msgTextRows }}" type="text" placeholder="If you want to embed video - use iframe" '
                     + 'class="form-control input-sm addItemValueInput" ng-model="$parent.valueName" ui-keyup="{\'enter\':\'addItem(child)\'}"/></span> '
 
                 + '<span ng-show="$parent.valueType == \''+numberName+'\'"> : <input type="text" placeholder="Value" '

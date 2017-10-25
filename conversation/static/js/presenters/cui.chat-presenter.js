@@ -13,12 +13,6 @@ var CUI = CUI || {};
  * @returns {CUI.ChatPresenter}
  */
 CUI.ChatPresenter = function(chatID, historyUrl, progressUrl, resourcesUrl){
-  // Check arguments
-//  if(typeof chatID !== 'number') throw new Error('CUI.ChatPresenter(): Invalid chatID.');
-//  if(!historyUrl) throw new Error('CUI.ChatPresenter(): No historyUrl.');
-//  if(!progressUrl) throw new Error('CUI.ChatPresenter(): No progressUrl.');
-//  if(!resourcesUrl) throw new Error('CUI.ChatPresenter(): No resourcesUrl.');
-
   /* When chat gets doWait parameter it should show messages only first time. This flag is about it.
    * @type {bool}
    * @protected
@@ -230,17 +224,17 @@ CUI.ChatPresenter.prototype._getMessages = function(url){
   }
   data = CUI.tree.nodes[url];
   if (data === undefined) {
-    console.log("FSM ENDED");
+    if (CUI.config.DEBUG) {
+      console.log("FSM ENDED");
+    }
     $.ajax({
       url: CUI.config.get_chat_status_url,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json',
-//      data: JSON.stringify(data.addMessages),
       cache: false,
       context: this
     }).done(function(data){
-      console.log(data);
       this._parseMessages(data, true);
     });
     return
@@ -260,17 +254,12 @@ CUI.ChatPresenter.prototype._getMessages = function(url){
         cache: false,
         context: this
       }).done(function(response){
-        //  console.log(response);
         this._parseMessages(data, true);
       });
     }
     else throw new Error("CUI.ChatPresenter._getMessages(): No data.addMessages.");
-
     // Hide spinner
     this._hideLoading();
-//    this._sendGrade(data.grade);
-//    if (!data.final) this._sendGrade(data.grade);
-//  }).fail(function(){ throw new Error("CUI.ChatPresenter._getMessages(): Failed to load messages."); });
 };
 
 
@@ -313,9 +302,6 @@ CUI.ChatPresenter.prototype._postInput = function(input){
     cache: false,
     context: this
   }).done(function(response){
-
-      console.log(response);
-
       var msg_txt = '';
       var selected_option_model = undefined;
       if(input.option) {
@@ -327,7 +313,9 @@ CUI.ChatPresenter.prototype._postInput = function(input){
             selected_option_model = this._inputOptions[i]._model
             msg_txt = selected_option_model.text
             if (selected_option_model.bot) {
-              console.log("Selected OPtion Model = ", selected_option_model.bot);
+              if (CUI.config.DEBUG) {
+                console.log("Selected OPtion Model = ", selected_option_model.bot);
+              }
             }
             break;
           }
@@ -340,16 +328,17 @@ CUI.ChatPresenter.prototype._postInput = function(input){
         id: Math.round(Math.random() * 100 * 100),
         userMessage: true
       })
-      this._addMessage(message_model);
+
       // show message in the chat
-      // var me = this;
+      this._addMessage(message_model);
       this._showLoading();
 
       function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
       }
-      var interval_min = 1000;
-      var interval_max = 3000;
+
+      var interval_min = CUI.config.interval_min;
+      var interval_max = CUI.config.interval_max;
       var bot_interval_min = interval_min,
           bot_interval_max = interval_max;
       if (selected_option_model && selected_option_model.bot) {
@@ -379,9 +368,13 @@ CUI.ChatPresenter.prototype._postInput = function(input){
               cache: false,
               context: this
             }).done(function(response){
-                console.log(response);
+                if (CUI.config.DEBUG) {
+                  console.log(response);
+                };
             }).error(function(response){
-                console.log("Sending bot msg to server fault!");
+                if (CUI.config.DEBUG) {
+                  console.log("Sending bot msg to server fault!");
+                }
             });
             if (bot.reanswering) {
               // console.log("BOT ", bot);
@@ -817,7 +810,6 @@ CUI.ChatPresenter.prototype._getScrollSpeed = function(scrollTo){
  * @param {object} input          - An object with settings for the input type.
  */
 CUI.ChatPresenter.prototype._setInput = function(input){
-  console.log(input);
   var $text;
   var $options;
   var $custom;
@@ -825,7 +817,6 @@ CUI.ChatPresenter.prototype._setInput = function(input){
 
   //Disable input
   this._inputIsEnabled = false;
-
 
   // Find containers for the various input types
   $text = this._$inputContainer.find('.chat-input-text');

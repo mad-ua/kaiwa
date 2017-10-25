@@ -117,7 +117,6 @@ class TaskConverter:
         """
         Convert Edge/Outcome.
         """
-        # print(outcome)
         edge = {
             "text": outcome.get('Text'),
             "value": outcome.get('Target'),
@@ -179,50 +178,34 @@ class TaskConverter:
         bot['addMessages'] = []
         advisers_obj = self.data['Advisers Management']
         for name, adviser_obj in advisers_obj.items():
-            opt_adviser = feedbacks[name]
-            bot['addMessages'].append({
-              "id": random.randint(*self.ADVISER_MSG_ID_INTERVAL),
-              "type": "message",
-              "name": "{}".format(adviser_obj['Name']),
-              "userMessage": False,
-              "avatar": adviser_obj['Avatar'],
-              "html": opt_adviser.get("Text")
-            })
-            if opt_adviser.get('Target'):
-                bot["reanswering"] = True
-                bot['input'] = {
-                    "type": "options",
-                    "url": opt_adviser['Target'],
-                    "options": [
-                    {
-                      "text": opt_adviser.get('Button Text') or 'OK',
-                      "value": opt_adviser.get('Target')
-                    }]
-                }
-                if opt_adviser.get('Answers'):  # Answers is a list of option objects.
-                    bot['input']['options'] = [
-                        {'text': i['Text'], 'value': i['Target']} for i in opt_adviser['Answers']
-                    ]
-
-        '''
-        for name, item in feedbacks.items():
-
-            bot['addMessages'].append({
-              "id": random.randint(*self.ADVISER_MSG_ID_INTERVAL),
-              "type": "message",
-              "name": "{}".format(name),
-              "userMessage": False,
-              "avatar": None,
-              "html": item.get("Text")
-            })
-        '''
-
+            opt_adviser = feedbacks.get(name)
+            if opt_adviser:
+                bot['addMessages'].append({
+                  "id": random.randint(*self.ADVISER_MSG_ID_INTERVAL),
+                  "type": "message",
+                  "name": "{}".format(adviser_obj['Name']),
+                  "userMessage": False,
+                  "avatar": adviser_obj['Avatar'],
+                  "html": opt_adviser.get("Text")
+                })
+                if opt_adviser.get('Target'):
+                    bot["reanswering"] = True
+                    bot['input'] = {
+                        "type": "options",
+                        "url": opt_adviser['Target'],
+                        "options": [
+                        {
+                          "text": opt_adviser.get('Button Text') or 'OK',
+                          "value": opt_adviser.get('Target')
+                        }]
+                    }
+                    if opt_adviser.get('Answers'):  # Answers is a list of option objects.
+                        bot['input']['options'] = [
+                            {'text': i['Text'], 'value': i['Target']} for i in opt_adviser['Answers']
+                        ]
         return bot
 
     def convert_results_message(self, results_data):
-        # FINAL_MESSAGE_TEMPLATE
-        # FINAL_MSG_KC_SCORE_TEMPLATE
-
         scores_html = "".join([
             self.FINAL_MSG_KC_SCORE_TEMPLATE.format(kc_name=kc_name, kc_score=kc_score)
             for kc_name, kc_score in results_data['kc_scores'].items()

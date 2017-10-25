@@ -95,11 +95,10 @@ $(window).on('load', function(){
     method: 'PUT',
     dataType: 'json',
     contentType: 'application/json',
-//    data: JSON.stringify(input),
     cache: false,
     context: this
   }).done(function(response){
-    console.log(response);
+    console.log("Reset chat statistics result ", response);
   })
 
   // Hide spinner

@@ -75,6 +75,8 @@
     CUI.config.grading_url = "{{ grading_url }}";
     CUI.config.get_chat_status_url = "{% url 'get_chat_status' task_id=task_id %}";
     CUI.config.reset_chat_stats_url = "{% url 'reset_user_task_score' task_id=task_id %}";
+    CUI.config.interval_min = 1000;
+    CUI.config.interval_max = 3000;
     CUI.config.DEBUG = true
   CUI.config.historyUrl = '{% url "chat_history" task_id=task_id %}';
 // CUI.config.progressUrl = '/chat/progress/';
