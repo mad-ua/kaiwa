@@ -15,7 +15,7 @@ CUI.models = CUI.models || {};
  */
 CUI.InputOptionModel = function(data){
   // Check that data has all required properties
-  if(!data.value) throw new Error('CUI.InputOptionModel(): Invalid data.value.');
+  if(data.value === undefined) throw new Error('CUI.InputOptionModel(): Invalid data.value.');
   if(!data.text) throw new Error('CUI.InputOptionModel(): No data.text.');
 
   /**

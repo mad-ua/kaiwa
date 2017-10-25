@@ -46,7 +46,6 @@ angular.module('JSONedit', ['ui.sortable'])
         var messageName = "Message";
         var optionName = "Option";
         var adviserName = "Adviser";
-        var advisersName = "AdviserS";
 
         scope.msgTextRows = 6;
 
@@ -158,8 +157,12 @@ angular.module('JSONedit', ['ui.sortable'])
             return "Text " + (maxT + 1);
         };
         scope.addItem = function(obj) {
+            var keysNotToChk = [messageName, advisersName];
             if (getType(obj) == "Object") {
                 // check input for key
+//                if (keysNotToChk.indexOf(scope.keyName)) {
+//                    console.log("addItem scope.keyName = ", scope.keyName);
+//                } else
                 if (scope.keyName == undefined || scope.keyName.length == 0){
                     alert("Please fill in a name");
                 } else if (scope.keyName.indexOf("$") == 0){
@@ -167,6 +170,7 @@ angular.module('JSONedit', ['ui.sortable'])
                 } else if (scope.keyName.indexOf("_") == 0){
                     alert("The name may not start with _ (the underscore)");
                 } else {
+//                    console.log("AddItem else");
                     if (obj[scope.keyName]) {
                         if( !confirm('An item with the name "'+scope.keyName
                             +'" exists already. Do you really want to replace it?') ) {

@@ -19,6 +19,13 @@ graded_history_storage = GradedHistoryStorage()
 
 @login_required
 def chat_view(request, *args, **kwargs):
+    '''
+    Return HTML template with chat initialization functions, css and so on.
+    :param request: request
+    :param args: no args
+    :param kwargs: {'graded_task': ..., 'task_id': ...}
+    :return: HTML response
+    '''
     graded_task = kwargs.get('graded_task')
     graded_task_id = graded_task.id if graded_task else None
     task_id = kwargs.get('task_id')
@@ -35,42 +42,48 @@ def chat_view(request, *args, **kwargs):
 
 
 def get_tree(request, *args, **kwargs):
+    '''
+    Return CT graph converted to needed format that JS chat can understand and correctly handle.
+    :param request: django request
+    :param args: no args
+    :param kwargs: {'task_id': r'\w+'}
+    :return: converted graph for chat as JSON
+    '''
     task_id = kwargs.get('task_id')
     task_data = tasks_storage.get_task(task_id)
     if not task_data:
         task_data = json.load(
             open(os.path.join(settings.BASE_DIR, '../conversation', 'static', 'tree_fixture.json'))
         )
-
-    # if task_id and task_id != 'None':
-    #     task = get_object_or_404(Task, task_id=task_id)
-    #     task_data['user_id'] = request.user.id
-    #     task_data['task_id'] = task_id
-    #     task_data['task_name'] = task.name
     chat_data = TaskConverter(task_data).convert()
-
-    print(chat_data['tree']['nodes'].keys())
-
     return JsonResponse(chat_data)
 
 
 def get_tree_graph(request, *args, **kwargs):
+    '''
+    Return CT graph converted to needed format that JS plugin which show diagram can understand and correctly handle.
+    :param request: django request
+    :param args: no args
+    :param kwargs: {'task_id': r'\w+'}
+    :return: converted graph for gojs as JSON
+    '''
     task_id = kwargs.get('task_id')
     task_data = tasks_storage.get_task(task_id)
     if not task_data:
         task_data = json.load(
             open(os.path.join(settings.BASE_DIR, '../conversation', 'static', 'tree_fixture.json'))
         )
-    # if task_id and task_id != 'None':
-    #     task = get_object_or_404(Task, task_id=task_id)
-    #     task_data['user_id'] = request.user.id
-    #     task_data['task_id'] = task_id
-    #     task_data['task_name'] = task.name
     chat_data = TaskConverter(task_data).convert_graph()
     return JsonResponse(chat_data)
 
 
 def chat_history(request, task_id):
+    '''
+    Store message in graded_history collection when receive PUT request and return all user history for this CT
+    :param request: django request
+    :param task_id: task_id
+    :return: json with status
+    '''
     if request.method in ('POST', 'PUT'):
         data = json.loads(request.body)
         if not data:
@@ -82,6 +95,14 @@ def chat_history(request, task_id):
 
 
 def update_score(request, graded_task_id, msg_id=0):
+    '''
+    This function store message and updates scores for corresponding KC.
+
+    :param request: django request
+    :param graded_task_id: task_id
+    :param msg_id: msg_id
+    :return: stored message
+    '''
     data = json.loads(request.body)
 
     try:
@@ -103,7 +124,6 @@ def update_score(request, graded_task_id, msg_id=0):
     converter = TaskConverter({})
     message_data = converter.convert_user_message(
         request.user,
-        # data['text'],
         data,
         relies_to_msg_id,
 
@@ -114,7 +134,7 @@ def update_score(request, graded_task_id, msg_id=0):
     if data['score']:
         if not data['kc'] and len(task['KC management']) == 1:
             # if no kc passed and only one KC present in KC Management section - use this KC as default.
-            data['kc'] = task['KC management'].keys()[0]
+            data['kc'] = list(task['KC management'].keys())[0]
 
         graded_history_storage.update_user_task_score(request.user.id, graded_task_id, data['score'], data['kc'])
 
@@ -127,12 +147,27 @@ def update_score(request, graded_task_id, msg_id=0):
 
 
 def get_chat_status(request, task_id):
+    '''
+    Return conversation talk results.
+    Doing all needed checks inside of calculate_user_kc_scores func.
+    :param request: django request
+    :param task_id: task_id
+    :return:
+    '''
     converter = TaskConverter({})
     d = converter.convert_results_message(graded_history_storage.calculate_user_kc_scores(request.user.id, task_id))
     return JsonResponse(data=d, safe=False)
 
 @login_required
 def reset_user_task_score(request,  *args, **kwargs):
+    '''
+    When user reloads page this function will be called.
+    It will mark all history for this user-task as not actual.
+    :param request: django request
+    :param args: no args
+    :param kwargs: {'task_id': r'\w*'}
+    :return: json with status
+    '''
     task_id = kwargs.get('task_id')
     task_data = tasks_storage.get_task(task_id)
     if not task_data:

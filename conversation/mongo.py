@@ -46,7 +46,7 @@ class TasksStorage(MongoBase):
         """
         return self.collection.find_one(
             {"user_id": user_id, 'task_id': task_id},
-            projection={'_id': 0, 'user_id': 0, "task_id": 1}
+            projection={'_id': 0, 'user_id': 0}
         )
 
     def upsert_conversation(self,  task_id, task_data):
@@ -152,12 +152,13 @@ class GradedHistoryStorage(MongoBase):
                 kc_scores[kc] = 0
 
         conversational_task_score = (
-            sum([float(score) * float(task['KC management'][name]['Weight']) for name, score in kc_scores.items()]) /
+            sum([float(score) * float(task['KC management'][name]['Weight']) for name, score in kc_scores.items()])
+            /
             sum([float(kc_obj['Weight']) for name, kc_obj in task['KC management'].items()])
         )
         return {
             'conversational_task_score': conversational_task_score,
-            'kc_scores': kc_scores,
+            'kc_scores': {task['KC management'][kc]['Name']: value for name, value in kc_scores.items()},
 
         }
 

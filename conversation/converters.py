@@ -121,7 +121,7 @@ class TaskConverter:
         edge = {
             "text": outcome.get('Text'),
             "value": outcome.get('Target'),
-            "score": int(outcome.get('Score') or 0),
+            "score": outcome.get('Score') or 1,
             "weight": weight,
             "kc": kc,
         }

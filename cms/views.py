@@ -106,8 +106,9 @@ def create_task(request):
           "KC": "",
           "Weight": 1,
           "Messages": {
-            "Text": "",
-            "Text2": ""
+            "Text": "Put some text here for 1-st message",
+            "Text2": "Put some text here for 2-nd message",
+            "Text4": "If you want to embed video please use iframe"
           },
           "Answers": {
             "Option 1": {
