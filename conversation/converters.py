@@ -189,7 +189,7 @@ class TaskConverter:
               "html": opt_adviser.get("Text")
             })
             if opt_adviser.get('Target'):
-                bot["reanswering"] = 1
+                bot["reanswering"] = True
                 bot['input'] = {
                     "type": "options",
                     "url": opt_adviser['Target'],
@@ -199,6 +199,10 @@ class TaskConverter:
                       "value": opt_adviser.get('Target')
                     }]
                 }
+                if opt_adviser.get('Answers'):  # Answers is a list of option objects.
+                    bot['input']['options'] = [
+                        {'text': i['Text'], 'value': i['Target']} for i in opt_adviser['Answers']
+                    ]
 
         '''
         for name, item in feedbacks.items():

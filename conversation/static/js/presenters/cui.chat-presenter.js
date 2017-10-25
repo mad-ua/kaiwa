@@ -327,7 +327,7 @@ CUI.ChatPresenter.prototype._postInput = function(input){
             selected_option_model = this._inputOptions[i]._model
             msg_txt = selected_option_model.text
             if (selected_option_model.bot) {
-              console.log(selected_option_model.bot);
+              console.log("Selected OPtion Model = ", selected_option_model.bot);
             }
             break;
           }
@@ -352,7 +352,7 @@ CUI.ChatPresenter.prototype._postInput = function(input){
       var interval_max = 3000;
       var bot_interval_min = interval_min,
           bot_interval_max = interval_max;
-      if (selected_option_model.bot) {
+      if (selected_option_model && selected_option_model.bot) {
         interval_max += 1000;
         interval_min += 1000;
 
