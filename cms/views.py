@@ -92,13 +92,13 @@ def create_task(request):
         }
       },
       "Bot Management": {
-        "name": "Bot name",
-        "bot_avatar":  static("img/bot.jpg"),
+        "Name": "Bot name",
+        "Avatar":  static("img/bot.jpg"),
       },
       "Advisers Management": {
           "Adviser 1": {
-              "name": "Some adviser",
-              "avatar":  static("img/adviser.jpg"),
+              "Name": "Some adviser",
+              "Avatar":  static("img/adviser.jpg"),
           }
       },
       "Nodes management": {
@@ -115,8 +115,18 @@ def create_task(request):
               "Target": "",
               "Advisers": {
                 "Adviser 1": {
-                  "Text": "",
-                  "Target": ""
+                  "Text": "Text that adviser should say",
+                  "Target": "",
+                  "Answers": [
+                      {
+                          "Target": 0,
+                          "Text": "OK"
+                      },
+                      {
+                          "Target": 0,
+                          "Text": "Not OK"
+                      }
+                  ]
                 }
               },
               "Score": 0

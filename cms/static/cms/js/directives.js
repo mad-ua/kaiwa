@@ -46,16 +46,19 @@ angular.module('JSONedit', ['ui.sortable'])
         var messageName = "Message";
         var optionName = "Option";
         var adviserName = "Adviser";
+        var advisersName = "AdviserS";
 
         scope.msgTextRows = 6;
 
+        var defaultOptionObject = {
+            'Score': 1,
+            'Target': 0,
+            'Text': 'Input option text here'
+        };
+
         var defaultNodeObject = {
             'Answers': {
-                'Option 1': {
-                    'Score': 1,
-                    'Target': 0,
-                    'Text': 'Input answer\'s text here'
-                }
+                'Option 1': defaultOptionObject
             },
             'Messages': {
                 'Text 1': 'Input response text here'
@@ -64,16 +67,13 @@ angular.module('JSONedit', ['ui.sortable'])
             'KC': 'Input KC here'
         };
 
-        var defaultOptionObject = {
-            'Score': 1,
-            'Target': 0,
-            'Text': 'Input option text here'
-        };
-
         var defaultAdviserObject = {
             'Target': 0,
-            'Text': 'Some text that adviser should say'
+            'Text': 'Some text that adviser should say',
+            'Answers': [defaultOptionObject]
         }
+
+        var defaultAnswerOption = Object.assign({}, defaultOptionObject)
 
 
 //        console.log("scope = ", scope, "elem = ", element, "attribs = ", attributes);
@@ -201,8 +201,9 @@ angular.module('JSONedit', ['ui.sortable'])
                                         break;
                         case optionName: obj[scope.keyName] = defaultOptionObject;
                                         break;
-                        case adviserName:obj[scope.keyName] = defaultAdviserObject;
+                        case adviserName: obj[scope.keyName] = defaultAdviserObject;
                                         break;
+                        case advisersName:
                         case messageName: obj[scope.keyName] = scope.valueName ? scope.valueName : "Input message text here";
                                         break;
                     }
@@ -267,6 +268,13 @@ angular.module('JSONedit', ['ui.sortable'])
         scope.noDelNodeFields = ['Answers', 'Messages', 'KC', 'Weight'];
         scope.noDelOptionFields = ['Score', 'Target', 'Text'];
 
+        var cantAddInRoot = true;
+        var cantAddInOption = false;
+        var cantAddInNode = true;
+        var cantAddInKcManagement = true;
+        var cantAddIndvisersManagement = true;
+
+
         scope.all = function(obj, keys){
             return $.map(keys, function(e){
                 if(typeof(e) == "string" && e[0] == '?') { // this means not required field.
@@ -304,7 +312,12 @@ angular.module('JSONedit', ['ui.sortable'])
             var isKcManagement = scope.isKcManagementObject(child);
             var isOption = scope.isOptionObject(child);
             var isAdvisersManagement = scope.isAdvisersManagementObject(child);
-            if (isRoot || (!isRoot && (isKcManagement || isAdvisersManagement || isOption || isNode || isRoot))) {return false};
+            if (isRoot || (!isRoot && (
+                (cantAddInKcManagement && isKcManagement) ||
+                (cantAddIndvisersManagement && isAdvisersManagement) ||
+                (cantAddInOption && isOption) ||
+                (cantAddInNode && isNode) ||
+                (cantAddInRoot && isRoot)))) {return false};
             return true;
         };
 

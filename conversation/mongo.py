@@ -146,7 +146,10 @@ class GradedHistoryStorage(MongoBase):
 
         for kc in kc_node_weights_sum:
             # history['KC'] contains a sum of all scores for that KC
-            kc_scores[kc] = float(history.get('KC', {}).get(kc, 0)) / float(kc_node_weights_sum[kc])
+            if kc_node_weights_sum[kc] != 0:
+                kc_scores[kc] = float(history.get('KC', {}).get(kc, 0)) / float(kc_node_weights_sum[kc])
+            else:
+                kc_scores[kc] = 0
 
         conversational_task_score = (
             sum([float(score) * float(task['KC management'][name]['Weight']) for name, score in kc_scores.items()]) /
