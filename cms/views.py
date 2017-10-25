@@ -4,6 +4,7 @@ import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.templatetags.static import static
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
@@ -90,13 +91,24 @@ def create_task(request):
           "Weight": 1
         }
       },
+      "Bot Management": {
+        "Name": "Bot name",
+        "Avatar":  static("img/bot.jpg"),
+      },
+      "Advisers Management": {
+          "Adviser 1": {
+              "Name": "Some adviser",
+              "Avatar":  static("img/adviser.jpg"),
+          }
+      },
       "Nodes management": {
         "1": {
           "KC": "",
           "Weight": 1,
           "Messages": {
-            "Text": "",
-            "Text2": ""
+            "Text": "Put some text here for 1-st message",
+            "Text2": "Put some text here for 2-nd message",
+            "Text4": "If you want to embed video please use iframe"
           },
           "Answers": {
             "Option 1": {
@@ -104,8 +116,18 @@ def create_task(request):
               "Target": "",
               "Advisers": {
                 "Adviser 1": {
-                  "Text": "",
-                  "Target": ""
+                  "Text": "Text that adviser should say",
+                  "Target": "",
+                  "Answers": [
+                      {
+                          "Target": 0,
+                          "Text": "OK"
+                      },
+                      {
+                          "Target": 0,
+                          "Text": "Not OK"
+                      }
+                  ]
                 }
               },
               "Score": 0

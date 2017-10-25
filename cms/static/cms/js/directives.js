@@ -28,6 +28,13 @@ angular.module('JSONedit', ['ui.sortable'])
       defaultCollapsed: '='
     },
     link: function(scope, element, attributes) {
+        /*
+        *
+        * set DEBUG true when you want to delete not deletable fields or add any field in any object.
+        *
+        */
+        var DEBUG = true;
+
         var stringName = "Text";
         var objectName = "Object";
         var arrayName = "Array";
@@ -35,7 +42,40 @@ angular.module('JSONedit', ['ui.sortable'])
         var boolName = "Boolean";
         var numberName = "Number";
 
-        scope.valueTypes = [stringName, objectName, arrayName, refName, boolName, numberName];
+        var nodeName = "Node";
+        var messageName = "Message";
+        var optionName = "Option";
+        var adviserName = "Adviser";
+
+        scope.msgTextRows = 6;
+
+        var defaultOptionObject = {
+            'Score': 1,
+            'Target': 0,
+            'Text': 'Input option text here'
+        };
+
+        var defaultAdviserObject = {
+            'Target': 0,
+            'Text': 'Some text that adviser should say',
+            'Answers': [defaultOptionObject]
+        }
+
+        var defaultAnswerOption = Object.assign({'Advisers': {'Adviser 1': defaultAdviserObject}}, defaultOptionObject)
+
+        var defaultNodeObject = {
+            'Answers': {
+                'Option 1': defaultAnswerOption
+            },
+            'Messages': {
+                'Text 1': 'Input response text here'
+            },
+            'Weight': 1,
+            'KC': 'Input KC here'
+        };
+
+        scope.valueTypes = [stringName, objectName, arrayName, refName, boolName,
+                            numberName, nodeName, messageName, optionName, adviserName];
         scope.sortableOptions = {
             axis: 'y'
         };
@@ -104,6 +144,16 @@ angular.module('JSONedit', ['ui.sortable'])
                 console.error("object to delete from was " + obj);
             }
         };
+
+        scope._getMessagePlaceholder = function(obj) {
+            var maxT=0;
+            $.map(Object.keys(obj), function(e){
+                var v = parseFloat(e.slice(-1));
+                if (v > maxT) maxT=v;
+            })
+            return "Text " + (maxT + 1);
+        };
+
         scope.addItem = function(obj) {
             if (getType(obj) == "Object") {
                 // check input for key
@@ -138,6 +188,19 @@ angular.module('JSONedit', ['ui.sortable'])
                                         break;
                         case boolName: obj[scope.keyName] = false;
                                         break;
+                        /*
+                        *
+                        *   Project specific fields: Node, Option, Adviser, Message handling.
+                        *
+                        */
+                        case nodeName: obj[scope.keyName] = defaultNodeObject;
+                                        break;
+                        case optionName: obj[scope.keyName] = defaultAnswerOption;
+                                        break;
+                        case adviserName: obj[scope.keyName] = defaultAdviserObject;
+                                        break;
+                        case messageName: obj[scope.keyName] = scope.valueName ? scope.valueName : "Input message text here";
+                                        break;
                     }
                     //clean-up
                     scope.keyName = "";
@@ -163,6 +226,19 @@ angular.module('JSONedit', ['ui.sortable'])
                                     break;
                     case refName: obj.push({"Reference!!!!": "todo"});
                                     break;
+                    /*
+                    *
+                    *   Project specific fields: Node, Option, Adviser, Message handling.
+                    *
+                    */
+                    case nodeName: obj.push(defaultNodeObject);
+                                    break;
+                    case optionName: obj.push(defaultAnswerOption);
+                                    break;
+                    case adviserName:obj.push(defaultAdviserObject);
+                                    break;
+                    case messageName: obj.push(scope.valueName ? scope.valueName : "Input message text here");
+                                    break;
                 }
                 scope.valueName = "";
                 scope.showAddKey = false;
@@ -172,6 +248,96 @@ angular.module('JSONedit', ['ui.sortable'])
         };
         scope.possibleNumber = function(val) {
             return isNumber(val) ? parseFloat(val) : val;
+        };
+
+        // this set of fields helps us to recognize where we are
+        scope.rootFields = ['KC management', 'Nodes management', 'task_id'];
+        scope.nodeFields = ['Answers', 'Messages'];
+        scope.kcManagementFields = ['Name', 'Weight'];
+        scope.optionFields = ['?Score', 'Target', 'Text'];
+        scope.advisersManagementFields = ['Name', 'Avatar'];
+
+        // list of fields which can not be deleted
+        scope.noDelRootFields = ['CT Name', 'Advisers Management', 'KC management', 'Nodes management', 'task_id']
+        scope.noDelNodeFields = ['Answers', 'Messages', 'KC', 'Weight'];
+        scope.noDelOptionFields = ['Score', 'Target', 'Text'];
+
+        var cantAddInRoot = true;
+        var cantAddInOption = false;
+        var cantAddInNode = true;
+        var cantAddInKcManagement = true;
+        var cantAddIndvisersManagement = true;
+
+        scope.all = function(obj, keys){
+            return $.map(keys, function(e){
+                if(typeof(e) == "string" && e[0] == '?') { // this means not required field.
+                    return
+                }
+                return obj[e] != undefined;
+            }).indexOf(false) == -1
+        };
+
+        scope.isAdvisersManagementObject = function(object) {
+            return scope.all(object, scope.advisersManagementFields);
+        }
+
+        scope.isRootObject = function(object) {
+            return scope.all(object, scope.rootFields);
+        };
+
+        scope.isNodeObject = function(object) {
+            return scope.all(object, scope.nodeFields);
+        };
+
+        scope.isKcManagementObject = function(object) {
+            return scope.all(object, scope.kcManagementFields);
+        };
+
+        scope.isOptionObject = function(object) {
+            return scope.all(object, scope.optionFields);
+        };
+
+        scope._showPlusButton = function(scope, child, key) {
+//            console.log("_showPlusButton child = ", child, " key = ", key);
+            var isRoot = scope.isRootObject(child);
+            var isNode = scope.isNodeObject(child);
+            var isKcManagement = scope.isKcManagementObject(child);
+            var isOption = scope.isOptionObject(child);
+            var isAdvisersManagement = scope.isAdvisersManagementObject(child);
+            if (isRoot || (!isRoot && (
+                (cantAddInKcManagement && isKcManagement) ||
+                (cantAddIndvisersManagement && isAdvisersManagement) ||
+                (cantAddInOption && isOption) ||
+                (cantAddInNode && isNode) ||
+                (cantAddInRoot && isRoot)))) {return false};
+            return true;
+        };
+
+        scope._canDeleteNode = function(scope, child, key) {
+            /** Here will be a set of rules for deleting properties, objects in CTE.
+            * We can not delete these properties:
+            * CT Name
+            * Advisers Management
+            * KC Management
+            * * KC -> Name and Weight
+            * But we can delete KC Management -> KC !!!
+            *
+            * Nodes Management
+            * Nodes Management -> Node -> Answers
+            * Nodes Management -> Node -> Weight
+            */
+            var isRoot = scope.isRootObject(child);
+            var isNode = scope.isNodeObject(child);
+            var isKcManagement = scope.isKcManagementObject(child);
+            var isOption = scope.isOptionObject(child);
+            var isAdvisersManagement = scope.isAdvisersManagementObject(child);
+
+            if (isRoot && scope.noDelRootFields.indexOf(key) != -1) {return false};
+            if (!isRoot && isKcManagement && scope.kcManagementFields.indexOf(key) != -1) {return false};
+            if (!isRoot && isOption && scope.noDelOptionFields.indexOf(key) != -1) {return false};
+            if (!isRoot && isNode && scope.noDelNodeFields.indexOf(key) != -1) {return false};
+            if (!isRoot && isAdvisersManagement && scope.advisersManagementFields.indexOf(key) != -1) {return false};
+            return true;
         };
 
         //////
@@ -185,8 +351,8 @@ angular.module('JSONedit', ['ui.sortable'])
         // recursion
         var switchTemplate = 
             '<span ng-switch on="getType(val)" >'
-                + '<json ng-switch-when="Object" child="val" type="object" default-collapsed="defaultCollapsed"></json>'
-                + '<json ng-switch-when="Array" child="val" type="array" default-collapsed="defaultCollapsed"></json>'
+                + '<json ng-switch-when="Object" child="val" type="object" default-collapsed="true"></json>'
+                + '<json ng-switch-when="Array" child="val" type="array" default-collapsed="true"></json>'
                 + '<span ng-switch-when="Boolean" type="boolean">'
                     + '<input type="checkbox" ng-model="val" ng-model-onblur ng-change="child[key] = val">'
                 + '</span>'
@@ -197,35 +363,57 @@ angular.module('JSONedit', ['ui.sortable'])
                     + 'placeholder="Empty" ng-model-onblur ng-change="child[key] = val"/>'
                 + '</span>'
             + '</span>';
-        
+
         // display either "plus button" or "key-value inputs"
-        var addItemTemplate = 
+        var addItemTemplate =
         '<div ng-switch on="showAddKey" class="block" >'
             + '<span ng-switch-when="true">';
                 if (scope.type == "object"){
-                   // input key
-                    addItemTemplate += '<input placeholder="Name" type="text" ui-keyup="{\'enter\':\'addItem(child)\'}" '
-                        + 'class="form-control input-sm addItemKeyInput" ng-model="$parent.keyName" /> ';
+                    // input key
+                    // Input for Message
+//                    TODO: FIXME: Next construction doesn't work... I don't know why,
+//                    addItemTemplate += '<span ng-switch on="getType(val)">'
+//                       +'<input ng-switch-when="\''+messageName+'\'" value="{{ _getMessagePlaceholder(child) }}" type="text" ui-keyup="{\'enter\':\'addItem(child)\'}" '
+//                        + 'class="form-control input-sm addItemKeyInput" ng-model="$parent.keyName" /> '
+//
+//                        +'<input ng-switch-default type="text" ui-keyup="{\'enter\':\'addItem(child)\'}" '
+//                        + 'class="form-control input-sm addItemKeyInput" ng-model="$parent.keyName" /> '
+//                    + '</span>';
+                    addItemTemplate += '<input ng-show="$parent.valueType == \''+messageName+'\'" value="{{ _getMessagePlaceholder(child) }}" type="text" ui-keyup="{\'enter\':\'addItem(child)\'}" '
+                        + 'class="form-control input-sm addItemKeyInput" ng-model="$parent.keyName" /> '
+                    // Input for all other fields
+                    addItemTemplate += '<input ng-show="$parent.valueType != \''+messageName+'\'" value="{{ _getMessagePlaceholder(child) }}" type="text" ui-keyup="{\'enter\':\'addItem(child)\'}" '
+                        + 'class="form-control input-sm addItemKeyInput" ng-model="$parent.keyName" /> '
+
                 }
                 addItemTemplate += 
                 // value type dropdown
                 '<select ng-model="$parent.valueType" ng-options="option for option in valueTypes" class="form-control input-sm"'
                     + 'ng-init="$parent.valueType=\''+stringName+'\'" ui-keydown="{\'enter\':\'addItem(child)\'}"></select>'
-                // input value
+                /* Input values for different types:
+                * String
+                * Message
+                * Number
+                */
                 + '<span ng-show="$parent.valueType == \''+stringName+'\'"> : <input type="text" placeholder="Value" '
                     + 'class="form-control input-sm addItemValueInput" ng-model="$parent.valueName" ui-keyup="{\'enter\':\'addItem(child)\'}"/></span> '
+
+                + '<span ng-show="$parent.valueType == \''+messageName+'\'"> : <textarea cols="{{ msgTextCols }}" rows="{{ msgTextRows }}" type="text" placeholder="If you want to embed video - use iframe" '
+                    + 'class="form-control input-sm addItemValueInput" ng-model="$parent.valueName" ui-keyup="{\'enter\':\'addItem(child)\'}"/></span> '
+
                 + '<span ng-show="$parent.valueType == \''+numberName+'\'"> : <input type="text" placeholder="Value" '
                     + 'class="form-control input-sm addItemValueInput" ng-model="$parent.valueName" ui-keyup="{\'enter\':\'addItem(child)\'}"/></span> '
+
                 // Add button
                 + '<button type="button" class="btn btn-primary btn-sm" ng-click="addItem(child)">Add</button> '
                 + '<button type="button" class="btn btn-default btn-sm" ng-click="$parent.showAddKey=false">Cancel</button>'
             + '</span>'
             + '<span ng-switch-default>'
                 // plus button
-                + '<button type="button" class="addObjectItemBtn" ng-click="$parent.showAddKey = true"><i class="glyphicon glyphicon-plus"></i></button>'
+                + '<button type="button" class="addObjectItemBtn" ng-click="$parent.showAddKey = true" ng-show="$parent._showPlusButton($parent, child, key)"><i class="glyphicon glyphicon-plus"></i></button>'
             + '</span>'
         + '</div>';
-    
+
         // start template
         if (scope.type == "object"){
             var template = '<i ng-click="toggleCollapse()" class="glyphicon" ng-class="chevron"></i>'
@@ -238,7 +426,7 @@ angular.module('JSONedit', ['ui.sortable'])
                         + '<input class="keyinput" type="text" ng-model="newkey" ng-init="newkey=key" '
                             + 'ng-blur="moveKey(child, key, newkey)"/>'
                         // delete button
-                        + '<i class="deleteKeyBtn glyphicon glyphicon-trash" ng-click="deleteKey(child, key)"></i>'
+                        + '<i class="deleteKeyBtn glyphicon glyphicon-trash" ng-show="_canDeleteNode($parent, child, key)" ng-click="deleteKey(child, key)"></i>'
                     + '</span>'
                     // object value
                     + '<span class="jsonObjectValue">' + switchTemplate + '</span>'

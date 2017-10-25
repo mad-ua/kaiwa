@@ -15,7 +15,9 @@ CUI.models = CUI.models || {};
  */
 CUI.InputOptionModel = function(data){
   // Check that data has all required properties
-  if(!data.value) throw new Error('CUI.InputOptionModel(): Invalid data.value.');
+  // zero is ok here, so cmp it with undefined.
+  if(data.value === undefined) throw new Error('CUI.InputOptionModel(): Invalid data.value.');
+  // check that text is present
   if(!data.text) throw new Error('CUI.InputOptionModel(): No data.text.');
 
   /**
@@ -24,6 +26,27 @@ CUI.InputOptionModel = function(data){
    * @public
    */
   this.value = data.value;
+
+  /**
+   * The kc of the input option.
+   * @type {string}
+   * @public
+   */
+  this.kc = data.kc;
+
+  /**
+   * The weight of the input option.
+   * @type {string}
+   * @public
+   */
+  this.weight = data.weight;
+
+  /**
+  * Score of each answer is stored here.
+  * @type {integer}
+  * @public
+  **/
+  this.score = data.score;
 
   /**
    * The text of the input option.
