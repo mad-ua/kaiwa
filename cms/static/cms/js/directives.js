@@ -262,11 +262,11 @@ angular.module('JSONedit', ['ui.sortable'])
         scope.noDelNodeFields = ['Answers', 'Messages', 'KC', 'Weight'];
         scope.noDelOptionFields = ['Score', 'Target', 'Text'];
 
-        var cantAddInRoot = true;
+        var cantAddInRoot = false;
         var cantAddInOption = false;
-        var cantAddInNode = true;
-        var cantAddInKcManagement = true;
-        var cantAddIndvisersManagement = true;
+        var cantAddInNode = false;
+        var cantAddInKcManagement = false;
+        var cantAddIndvisersManagement = false;
 
         scope.all = function(obj, keys){
             return $.map(keys, function(e){
@@ -304,12 +304,14 @@ angular.module('JSONedit', ['ui.sortable'])
             var isKcManagement = scope.isKcManagementObject(child);
             var isOption = scope.isOptionObject(child);
             var isAdvisersManagement = scope.isAdvisersManagementObject(child);
-            if (isRoot || (!isRoot && (
-                (cantAddInKcManagement && isKcManagement) ||
-                (cantAddIndvisersManagement && isAdvisersManagement) ||
-                (cantAddInOption && isOption) ||
-                (cantAddInNode && isNode) ||
-                (cantAddInRoot && isRoot)))) {return false};
+            if (
+                (isRoot && cantAddInRoot) ||
+                (!isRoot && (
+                    (cantAddInKcManagement && isKcManagement) ||
+                    (cantAddIndvisersManagement && isAdvisersManagement) ||
+                    (cantAddInOption && isOption) ||
+                    (cantAddInNode && isNode) ||
+                    (cantAddInRoot && isRoot)))) {return false};
             return true;
         };
 
