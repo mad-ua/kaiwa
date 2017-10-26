@@ -1,4 +1,4 @@
-<div class="chat-message chat-message-text {{#if userMessage}} chat-message-user {{/if}}" data-message-id="{{id}}">
+<div class="chat-message chat-message-text {{#if userMessage}} chat-message-user {{/if}}{{#if adviserMessage}} chat-message-advisor {{/if}}" data-message-id="{{id}}">
   <div class="chat-container">
     <div class="inner">
       <img src="{{avatar}}" alt="{{name}}" class="chat-avatar">

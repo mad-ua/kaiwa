@@ -53,6 +53,14 @@ CUI.ChatMessageModel = function(data){
    */
   this.userMessage = data.userMessage;
 
+
+  /**
+  * Is true if message is adviser's message
+  * @type {boolean}
+  * @public
+  **/
+  this.adviserMessage = data.isAdviser || false;
+
   /**
    * A url to an avatar displayed next to the message.
    * @type {string}
@@ -76,6 +84,7 @@ CUI.ChatMessageModel = function(data){
  * @returns {string}
  */
 CUI.ChatMessageModel.prototype._getDefaultAvatar = function(){
+  if(this.adviserMessage) return CUI.config.defaultAdviserAvatar;
   if(this.userMessage) return CUI.config.defaultStudentAvatar;
   else return CUI.config.defaultTeacherAvatar;
 };

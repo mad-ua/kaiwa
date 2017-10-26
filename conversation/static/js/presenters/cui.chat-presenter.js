@@ -312,9 +312,9 @@ CUI.ChatPresenter.prototype._postInput = function(input){
           ) {
             selected_option_model = this._inputOptions[i]._model
             msg_txt = selected_option_model.text
-            if (selected_option_model.bot) {
+            if (selected_option_model && selected_option_model.bot) {
               if (CUI.config.DEBUG) {
-                console.log("Selected OPtion Model = ", selected_option_model.bot);
+                console.log("Selected Option Model = ", selected_option_model.bot);
               }
             }
             break;
@@ -354,7 +354,7 @@ CUI.ChatPresenter.prototype._postInput = function(input){
         }
 
         window.setTimeout($.proxy(function(){
-          if (bot.messages) {
+          if (bot && bot.messages) {
             for (var i in bot.messages){
               this._addMessage(bot.messages[i], true);
             }

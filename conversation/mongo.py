@@ -152,9 +152,11 @@ class GradedHistoryStorage(MongoBase):
                 kc_scores[kc] = 0
 
         conversational_task_score = (
-            sum([float(score) * float(task['KC management'][name]['Weight']) for name, score in kc_scores.items()])
+            sum([float(score) * float(task['KC management'][name]['Weight']) for name, score in kc_scores.items()
+                 if isinstance(task['KC management'][name], dict)])
             /
-            sum([float(kc_obj['Weight']) for name, kc_obj in task['KC management'].items()])
+            sum([float(kc_obj['Weight']) for name, kc_obj in task['KC management'].items()
+                if isinstance(task['KC management'][name], dict)])
         )
         return {
             'conversational_task_score': conversational_task_score,

@@ -32,7 +32,9 @@ CUI.BotModel = function(data){
   if (data.addMessages) {
     this.messages = []
     for (var i in data.addMessages) {
-      this.messages.push(new CUI.ChatMessageModel(data.addMessages[i]));
+      var msg_data = data.addMessages[i];
+      msg_data['isAdviser'] = true;
+      this.messages.push(new CUI.ChatMessageModel(msg_data));
     }
   }
 

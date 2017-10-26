@@ -141,6 +141,7 @@ p + p {
   100% {
     -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
     transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); } }
+
 @keyframes jelly {
   0% {
     -webkit-transform: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
@@ -220,6 +221,7 @@ p + p {
   100% {
     -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
     transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); } }
+
 .browserupgrade {
   padding: 20px;
   background: #fff;
@@ -815,6 +817,7 @@ p + p {
 .chat-message.chat-message-text.chat-message-user .chat-avatar {
   left: auto;
   right: 0; }
+
 .chat-message.chat-message-text.chat-message-user .chat-bubble {
   float: right;
   background: #826DA1;
@@ -852,17 +855,20 @@ p + p {
   .chat-message.chat-message-media .chat-bubble .chat-actions .chat-actions-toggle span {
     background: rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.4); }
+
 .chat-message.chat-message-media img, .chat-message.chat-message-media iframe, .chat-message.chat-message-media audio, .chat-message.chat-message-media video {
   display: block;
   max-width: 100%;
   border-radius: 4px;
   margin: 0; }
+
 .chat-message.chat-message-media audio {
   margin: 40px !important; }
 
 /* --- Media message with caption --- */
 .chat-message.chat-message-media.chat-message-with-caption img, .chat-message.chat-message-media.chat-message-with-caption iframe, .chat-message.chat-message-media.chat-message-with-caption audio, .chat-message.chat-message-media.chat-message-with-caption video {
   border-radius: 4px 4px 0 0; }
+
 .chat-message.chat-message-media.chat-message-with-caption .caption {
   padding: 20px;
   font-size: 14px;
