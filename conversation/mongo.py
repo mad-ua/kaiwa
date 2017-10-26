@@ -134,7 +134,7 @@ class GradedHistoryStorage(MongoBase):
         }, projection={"_id": 0})
 
         kc_scores = {}
-        kc_node_weights_sum = {kc: 0 for kc in task['KC management'].keys()}
+        kc_node_weights_sum = {name: 0 for name, kc in task['KC management'].items() if isinstance(kc, dict)}
 
         for kc_name, kc_obj in task['KC management'].items():
             # go though all KC's
@@ -160,7 +160,7 @@ class GradedHistoryStorage(MongoBase):
         )
         return {
             'conversational_task_score': conversational_task_score,
-            'kc_scores': {task['KC management'][kc]['Name']: value for name, value in kc_scores.items()},
+            'kc_scores': kc_scores,
 
         }
 
