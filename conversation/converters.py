@@ -92,7 +92,7 @@ class TaskConverter:
             "type": "message",
             "name": "Name",
             "userMessage": False,
-            "avatar": static("img/adviser.jpg"),
+            "avatar": self.data['Bot Management']['Avatar'],
             "html": message,
         }
 
