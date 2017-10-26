@@ -160,7 +160,7 @@ class GradedHistoryStorage(MongoBase):
         )
         return {
             'conversational_task_score': conversational_task_score,
-            'kc_scores': kc_scores,
+            'kc_scores': {task['KC management'][k]['Name']: v for k, v in kc_scores.items()},
 
         }
 
