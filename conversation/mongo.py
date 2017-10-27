@@ -138,11 +138,15 @@ class GradedHistoryStorage(MongoBase):
 
         for kc_name, kc_obj in task['KC management'].items():
             # go though all KC's
-            for node_name, node in task['Nodes management'].items():
+            # for node_name, node in task['Nodes management'].items():
+            for msg in history['messages']:
                 # sum node weights by KC
-                kc = node.get('KC')
+                kc = msg.get('kc')
                 if kc and kc == kc_name:
-                    kc_node_weights_sum[kc] += node.get('Weight', 0)
+                    print(task['Nodes management'].keys())
+                    node_id = str(msg['relies_to_msg_id'])
+                    node = task['Nodes management'][node_id]
+                    kc_node_weights_sum[kc] += float(node.get('Weight', 1))
 
         for kc in kc_node_weights_sum:
             # history['KC'] contains a sum of all scores for that KC
