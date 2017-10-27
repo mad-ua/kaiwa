@@ -120,7 +120,7 @@ class TaskConverter:
         edge = {
             "text": outcome.get('Text'),
             "value": outcome.get('Target'),
-            "score": outcome.get('Score') or 1,
+            "score": outcome.get('Score'),
             "weight": weight,
             "kc": kc,
         }
@@ -221,5 +221,14 @@ class TaskConverter:
             "userMessage": False,
             "avatar": None,
             "html": res_html
-        }]
+        },
+        {
+           'id': random.randint(*self.ADVISER_MSG_ID_INTERVAL),
+            "type": "message",
+            "name": "Name",
+            "userMessage": False,
+            "avatar": None,
+            "html": 'There is a small refresher for you: <br><iframe width="560" height="315" src="https://www.youtube.com/embed/CKqCG99pKgE" frameborder="0" allowfullscreen></iframe>'
+        }
+        ]
         return {"addMessages": msg}
