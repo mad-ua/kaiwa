@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>dashboard</title>
+	<link href="https://fonts.googleapis.com/css?family=Muli:300,400,700|Roboto:400,500" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/styles.css" media="all" />
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/jquery.selectric.min.js"></script>
+	<script type="text/javascript" src="js/jquery.uploadPreview.min.js"></script>
+	<script type="text/javascript" src="js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="js/scripts.js"></script>
+	<!--[if lt IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<script type="text/javascript" src="js/PIE.js"></script>
+	<![endif]-->
+</head>
+<body>
+<div class="header">
+	<div class="container">
+
+	</div>
+</div>
+<div class="conversational_task">
+	<div class="container">
+		<form class="form-top" action="" id="topForm" method="get">
+			<fieldset>
+				<input type="text" id="title" name="title" value="Conversational Task" class="top-main-input" required>
+				<div class="conversational__top-inf">
+					<div class="row">
+						<div class="col-3">
+							<div class="name-wrap bot-name">
+								<div class="icon image-preview" id="image-preview">
+								  <label class="image-label" for="image-upload" id="image-label"><i class="sprite sprite-ico-01"></i></label>
+								  <input class="image-upload" type="file" name="image" id="image-upload" />
+								</div>
+								<input class="txt" type="text" placeholder="Bot Name">
+							</div>
+						</div>
+						<div class="col-3">
+							<div class="name-wrap adviser-name">
+								<div class="icon image-preview" id="image-preview2">
+								  <label class="image-label" for="image-upload" id="image-label2"><i class="sprite sprite-ico-01"></i></label>
+								  <input class="image-upload" type="file" name="image" id="image-upload2" />
+								</div>
+								<input class="txt" type="text" placeholder="Adviser Name">
+							</div>
+						</div>
+						<div class="col-3">
+							<button class="btn-01" type="submit"><i class="sprite sprite-ico-02"></i><span>Add new Adviser</span></button>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+		<div class="conversational__tabs">
+			<ul class="tabs">
+				<li class="tab-link current" data-tab="tab-1">KC-1</li>
+				<li class="tab-link" data-tab="tab-2">NODES</li>
+			</ul>
+			<div id="tab-1" class="tab-content current">
+				KC-1
+			</div>
+			<div id="tab-2" class="tab-content">
+				<ul class="mode-items">
+					<li>
+						<a class="mode-item" href="">
+							<strong class="node-id">1</strong>
+							<span class="node-message">I would be glad to help, Tim. What I’m going to do is ....</span>
+							<span class="node-weight">Weight (1)</span>
+						</a>
+						<button class="remove-item" type="button"><i class="sprite sprite-ico-03"></i></button>
+					</li>
+					<li>
+						<a class="mode-item" href="">
+							<strong class="node-id">2</strong>
+							<span class="node-message">I would be glad to help, Tim. What I’m going to do is ....</span>
+							<span class="node-weight">Weight (1)</span>
+						</a>
+						<button class="remove-item" type="button"><i class="sprite sprite-ico-03"></i></button>
+					</li>
+					<li>
+						<a class="mode-item" href="">
+							<strong class="node-id">3</strong>
+							<span class="node-message">I would be glad to help, Tim. What I’m going to do is ....</span>
+							<span class="node-weight">Weight (1)</span>
+						</a>
+						<button class="remove-item" type="button"><i class="sprite sprite-ico-03"></i></button>
+					</li>
+					<li>
+						<a class="mode-item" href="">
+							<strong class="node-id">4</strong>
+							<span class="node-message">I would be glad to help, Tim. What I’m going to do is ....</span>
+							<span class="node-weight">Weight (1)</span>
+						</a>
+						<button class="remove-item" type="button"><i class="sprite sprite-ico-03"></i></button>
+					</li>
+				</ul>
+				<button class="btn-01" type="button"><i class="sprite sprite-ico-02"></i><span>New Node</span></button>
+			</div>
+		</div>
+		<div class="form-01">
+			<div class="ttl-form">New Node</div>
+			<form action="" method="get" id="NewNodeForm">
+				<div class="row">
+					<div class="col-3">
+						<label for="id">ID</label>
+						<input id="id" name="id" type="text" placeholder="Node ID" class="input-01" required>
+					</div>
+					<div class="col-3">
+						<label for="weight">Weight</label>
+						<input id="weight" name="weight" type="text" placeholder="Node Weight" value="1" class="input-01" required>
+					</div>
+					<div class="col-3">
+						<label for="kc">KC</label>
+						<select name="seleckc" class="selec-01" name="" id="seleckc" required>
+							<option selected="selected" value="kc-1">KC 1</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+						</select>
+					</div>
+				</div>
+				<div class="box-items">
+					<div class="box-items-ttl"><span>Bot Message</span></div>
+					<div class="text-row">
+						<textarea placeholder="Recommended length is less than 140 symbols " name="" id="" cols="30" rows="1"></textarea>
+						<button class="remove-item" type="button"><i class="sprite sprite-ico-04"></i></button>
+					</div>
+					<button class="btn-02" type="button"><i class="sprite sprite-ico-05"></i><span>Message</span></button>
+				</div>
+				<div class="box-items">
+					<div class="box-items-ttl"><span>Bot Message</span></div>
+					<div class="text-row">
+						<textarea placeholder="Recommended length is less than 140 symbols " name="" id="" cols="30" rows="1"></textarea>
+						<button class="remove-item" type="button"><i class="sprite sprite-ico-04"></i></button>
+					</div>
+					<button class="btn-02" type="button"><i class="sprite sprite-ico-05"></i><span>Message</span></button>
+				</div>
+				<div class="box-items">
+					<button class="btn-03" type="button"><i class="sprite sprite-ico-02"></i><span>User Response</span></button>
+				</div>
+				<div class="btn-wrap align-center">
+					<button class="btn-04" type="submit" value="ADD">ADD</button>
+					<button class="btn-05" type="cansel" value="Cansel">Cansel</button>
+				</div>
+			</form>
+		</div>
+		<br>
+		<br>
+		<div class="form-01">
+			<div class="ttl-form">New Node</div>
+			<form action="" method="get" id="NewNodeForm2">
+				<div class="row">
+					<div class="col-3">
+						<label for="id">ID</label>
+						<input id="id2" name="id2" type="text" placeholder="Node ID" class="input-01" required>
+					</div>
+					<div class="col-3">
+						<label for="weight">Weight</label>
+						<input id="weight2" name="weight2" type="text" placeholder="Node Weight" value="1" class="input-01" required>
+					</div>
+					<div class="col-3">
+						<label for="kc">KC</label>
+						<select name="seleckc2" class="selec-01" name="" id="seleckc2" required>
+							<option selected="selected" value="kc-1">KC 1</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+						</select>
+					</div>
+				</div>
+				<div class="box-items">
+					<div class="box-items-ttl"><span>Bot Message</span></div>
+					<div class="text-row">
+						<textarea placeholder="Recommended length is less than 140 symbols " name="" id="" cols="30" rows="1"></textarea>
+						<button class="remove-item" type="button"><i class="sprite sprite-ico-04"></i></button>
+					</div>
+					<button class="btn-02" type="button"><i class="sprite sprite-ico-05"></i><span>Message</span></button>
+				</div>
+				<div class="box-items">
+					<div class="box-items-ttl"><span>Bot Message</span></div>
+					<div class="text-row">
+						<textarea placeholder="Recommended length is less than 140 symbols" name="" id="" cols="30" rows="1"></textarea>
+						<button class="remove-item" type="button"><i class="sprite sprite-ico-04"></i></button>
+					</div>
+					<button class="btn-02" type="button"><i class="sprite sprite-ico-05"></i><span>Message</span></button>
+				</div>
+				<div class="box-items">
+					<div class="box-items-ttl"><span>User Response</span></div>
+					<div class="text-row">
+						<textarea class="fiolet-textarea" placeholder="Recommended length is less than 140 symbols" name="" id="" cols="30" rows="1"></textarea>
+						<button class="remove-item" type="button"><i class="sprite sprite-ico-03"></i></button>
+					</div>
+					<div class="text-row">
+						<textarea class="fiolet-textarea" placeholder="Recommended length is less than 140 symbols" name="" id="" cols="30" rows="1"></textarea>
+						<button class="remove-item" type="button"><i class="sprite sprite-ico-03"></i></button>
+					</div>
+					<div class="text-row">
+						<textarea class="fiolet-textarea" placeholder="Recommended length is less than 140 symbols" name="" id="" cols="30" rows="1"></textarea>
+						<button class="remove-item" type="button"><i class="sprite sprite-ico-03"></i></button>
+					</div>
+					<button class="btn-03" type="button"><i class="sprite sprite-ico-02"></i><span>User Response</span></button>
+				</div>
+				<div class="btn-wrap align-center">
+					<button class="btn-04" type="submit" value="ADD">ADD</button>
+					<button class="btn-05" type="cansel" value="Cansel">Cansel</button>
+				</div>
+			</form>
+		</div>
+		<br>
+		<br>
+		<div class="form-01">
+			<div class="ttl-form">New User Response</div>
+			<form action="" method="get" id="NewUserResponse">
+				<div class="row-2">
+					<div class="col-6">
+						<label for="id">Score</label>
+						<input id="NewUserResponseId" name="NewUserResponseId" type="text" class="input-01" value="0" required>
+					</div>
+					<div class="col-6">
+						<label for="kc">Target</label>
+						<select class="selec-01" name="NewUserResponseSelect" id="NewUserResponseSelect" required>
+							<option selected="selected" value="-1">-</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+						</select>
+					</div>
+				</div>
+				<div class="box-items">
+					<div class="box-items-ttl"><span>Response</span></div>
+					<div class="text-row">
+						<textarea required class="green-textarea" placeholder="Recommended length is less than 140 symbols" name="NewUserResponseText" id="NewUserResponseText" cols="30" rows="10"></textarea>
+					</div>
+				</div>
+				<div class="btn-wrap align-center">
+					<button class="btn-04" type="submit" value="ADD">ADD</button>
+					<button class="btn-05" type="cansel" value="Cansel">Cansel</button>
+				</div>
+			</form>
+		</div>
+		<br>
+		<br>
+	</div>
+</div>
+</body>
+</html>
